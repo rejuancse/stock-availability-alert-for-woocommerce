@@ -1,10 +1,15 @@
 <?php
-/*
-Plugin Name: Enhanced Stock Availability Alert
-Description: Implement a notification system for out-of-stock items with advanced features including admin interface, better product suggestions, customizable emails, and rate limiting.
-Version: 2.0
-Author: Your Name
-*/
+/**
+ * Plugin Name: Enhanced Stock Availability Alert
+ * Description: Implement a notification system for out-of-stock items with advanced features including admin interface, better product suggestions, customizable emails, and rate limiting.
+ * Version:           1.0.0
+ * Requires at least: 5.9
+ * Requires PHP:      7.4
+ * Author:            Rejuan Ahamed
+ * Text Domain:       banner-image
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 // Ensure WooCommerce is active
 if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
