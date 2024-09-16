@@ -6,453 +6,475 @@
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            Rejuan Ahamed
- * Text Domain:       banner-image
+ * Text Domain:       stock-alert
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-// Ensure WooCommerce is active
-if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-    return;
-}
 
-// Add "Notify Me" button for out of stock products
-add_action('woocommerce_single_product_summary', 'add_notify_me_button', 30);
-function add_notify_me_button() {
-    global $product;
-    if (!$product->is_in_stock()) {
-        echo '<button class="button" id="notify-me-button">Notify Me When Available</button>';
-        echo '<div id="notify-me-form" style="display:none;">
-                <input type="email" id="notify-email" placeholder="Enter your email">
-                <input type="hidden" id="notify-product-id" value="' . esc_attr($product->get_id()) . '">
-                <button id="submit-notify">Submit</button>
-              </div>';
+defined( 'ABSPATH' ) || exit;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+/**
+ * The main plugin class
+ */
+final class Enhanced_Stock_Availability_Alert {
+
+    /**
+     * Plugin version
+     *
+     * @var string
+     */
+    const version = '1.0.0';
+
+    /**
+     * Class construcotr
+     */
+    private function __construct() {
+        $this->define_constants();
+        add_action( 'init', [ $this, 'stock_alert_language_load' ] );
+        register_activation_hook( __FILE__, [ $this, 'activate' ] );
+        add_action( 'plugins_loaded', [ $this, 'init_plugin' ] );
+        add_action('wp_enqueue_scripts', [ $this, 'frontend_script' ]);
+    }
+
+    /**
+    * Load Text Domain Language
+    */
+    function stock_alert_language_load(){
+        load_plugin_textdomain( 'stock-alert', false, basename(dirname( __FILE__ )).'/languages/');
+    }
+
+    /**
+     * Initialize a singleton instance
+     * @return \Enhanced_Stock_Availability_Alert
+     */
+    public static function init() {
+        static $instance = false;
+
+        if( ! $instance ) {
+            $instance = new self();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Define the required plugin constants
+     *
+     * @return void
+     */
+    public function define_constants() {
+        define( 'STOCK_ALERT_VERSION', self::version );
+        define( 'STOCK_ALERT_FILE', __FILE__ );
+        define( 'STOCK_ALERT_PATH', __DIR__ );
+        define( 'STOCK_ALERT_URL', plugins_url( '', STOCK_ALERT_FILE ) );
+        define( 'STOCK_ALERT_ASSETS', STOCK_ALERT_URL . '/assets' );
+    }
+
+    /**
+     * Do stuff upon plugin activation
+     *
+     * @return void
+     */
+    public function activate() {
+        $installed = get_option( 'stock_alert_installed' );
+
+        if ( ! $installed ) {
+            update_option( 'stock_alert_installed', time() );
+        }
+
+        update_option( 'stock_alert_version', STOCK_ALERT_VERSION );
+    }
+
+    /**
+     * Initialize the plugin
+     *
+     * @return void
+     */
+    public function init_plugin() {
+        if ( is_admin() ) {
+            new StockAlert\Admin();
+        }
+
+        // else {
+        //     new StockAlert\Frontend();
+        // }
+    }
+
+    /**
+     * Registering necessary js and css
+     * @ Frontend
+     */
+    public function frontend_script(){
+        wp_enqueue_script('stock-alert-notify-script', STOCK_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_ALERT_VERSION, true);
+        wp_localize_script('stock-alert-notify-script', 'notify_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
     }
 }
 
-// Enqueue JavaScript
-add_action('wp_enqueue_scripts', 'enqueue_notify_script');
-function enqueue_notify_script() {
-    wp_enqueue_script('notify-script', plugin_dir_url(__FILE__) . 'assets/js/notify-script.js', array('jquery'), '2.0', true);
-    wp_localize_script('notify-script', 'notify_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+/**
+ * Initilizes the main plugin
+ */
+function stock_availability_get_alert() {
+    return Enhanced_Stock_Availability_Alert::init();
 }
 
-// Handle AJAX request
-add_action('wp_ajax_stock_notification', 'handle_stock_notification');
-add_action('wp_ajax_nopriv_stock_notification', 'handle_stock_notification');
-function handle_stock_notification() {
-    $email = sanitize_email($_POST['email']);
-    $product_id = intval($_POST['product_id']);
+// Kick-off the plugin
+stock_availability_get_alert();
 
-    // Email validation
-    if (!is_email($email)) {
-        wp_send_json_error('Invalid email address');
+// if (!function_exists('banner_image_function')) {
+//     function banner_image_function() {
+//         return new Banner_Image\Functions();
+//     }
+// }
+
+
+
+
+
+class WC_Stock_Notification {
+    private static $instance = null;
+
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
-    if (!$product_id) {
-        wp_send_json_error('Invalid product ID');
+    private function __construct() {
+        $this->init_hooks();
     }
 
-    // Check rate limiting
-    if (is_rate_limited($email)) {
-        wp_send_json_error('Too many requests. Please try again later.');
+    private function init_hooks() {
+        add_action('plugins_loaded', array($this, 'load_plugin_textdomain'));
+        add_action('woocommerce_single_product_summary', array($this, 'add_notify_me_button'), 30);
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_action('wp_ajax_stock_notification', array($this, 'handle_stock_notification'));
+        add_action('wp_ajax_nopriv_stock_notification', array($this, 'handle_stock_notification'));
+        add_action('woocommerce_product_set_stock_status', array($this, 'send_stock_notifications'), 10, 3);
+        add_action('admin_menu', array($this, 'add_admin_menu'));
+        add_action('wp_dashboard_setup', array($this, 'add_dashboard_widget'));
+        add_action('woocommerce_product_set_stock', array($this, 'check_stock_and_notify'));
+
+        register_activation_hook(__FILE__, array($this, 'activate'));
     }
 
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
+    public function load_plugin_textdomain() {
+        load_plugin_textdomain('wc-stock-notification', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    }
 
-    // Check if the email-product combination already exists
-    $existing_notification = $wpdb->get_row(
-        $wpdb->prepare(
-            "SELECT * FROM $table_name WHERE email = %s AND product_id = %d",
-            $email,
-            $product_id
-        )
-    );
+    public function add_notify_me_button() {
+        global $product;
+        if (!$product->is_in_stock()) {
+            echo '<button class="button" id="notify-me-button">' . esc_html__('Notify Me When Available', 'wc-stock-notification') . '</button>';
+            echo '<div id="notify-me-form" style="display:none;">
+                    <input type="email" id="notify-email" placeholder="' . esc_attr__('Enter your email', 'wc-stock-notification') . '">
+                    <input type="hidden" id="notify-product-id" value="' . esc_attr($product->get_id()) . '">
+                    <button id="submit-notify">' . esc_html__('Submit', 'wc-stock-notification') . '</button>
+                  </div>';
+        }
+    }
 
-    if ($existing_notification) {
-        // Check if the existing notification is less than 24 hours old
-        $time_difference = current_time('timestamp') - strtotime($existing_notification->date_added);
-        if ($time_difference < 24 * 60 * 60) { // 24 hours in seconds
-            wp_send_json_error('You have already subscribed to notifications for this product. Please wait 24 hours before trying again.');
+    public function enqueue_scripts() {
+        wp_enqueue_script('notify-script', plugin_dir_url(__FILE__) . 'assets/js/notify-script.js', array('jquery'), '2.0', true);
+        wp_localize_script('notify-script', 'notify_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+    }
+
+    public function handle_stock_notification() {
+        $email = sanitize_email($_POST['email']);
+        $product_id = intval($_POST['product_id']);
+
+        if (!is_email($email)) {
+            wp_send_json_error(__('Invalid email address', 'wc-stock-notification'));
+        }
+
+        if (!$product_id) {
+            wp_send_json_error(__('Invalid product ID', 'wc-stock-notification'));
+        }
+
+        if ($this->is_rate_limited($email)) {
+            wp_send_json_error(__('Too many requests. Please try again later.', 'wc-stock-notification'));
+        }
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'stock_notifications';
+
+        $existing_notification = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM $table_name WHERE email = %s AND product_id = %d",
+                $email,
+                $product_id
+            )
+        );
+
+        if ($existing_notification) {
+            $time_difference = current_time('timestamp') - strtotime($existing_notification->date_added);
+            if ($time_difference < 24 * 60 * 60) {
+                wp_send_json_error(__('You have already subscribed to notifications for this product. Please wait 24 hours before trying again.', 'wc-stock-notification'));
+            } else {
+                $wpdb->update(
+                    $table_name,
+                    array('date_added' => current_time('mysql')),
+                    array('id' => $existing_notification->id)
+                );
+                wp_send_json_success(array(
+                    'message' => __("Your notification subscription has been renewed for this product.", 'wc-stock-notification'),
+                    'alternatives' => $this->get_alternative_products($product_id)
+                ));
+            }
         } else {
-            // Update the existing notification with the current timestamp
-            $wpdb->update(
+            $wpdb->insert(
                 $table_name,
-                array('date_added' => current_time('mysql')),
-                array('id' => $existing_notification->id)
+                array(
+                    'email' => $email,
+                    'product_id' => $product_id,
+                    'date_added' => current_time('mysql')
+                )
             );
+
+            $product = wc_get_product($product_id);
+            $product_name = $product ? $product->get_name() : __('this product', 'wc-stock-notification');
+
             wp_send_json_success(array(
-                'message' => "Your notification subscription has been renewed for this product.",
-                'alternatives' => get_alternative_products($product_id)
+                'message' => sprintf(__("Thank you! We've added your email to the notification list for %s. We'll let you know as soon as it's back in stock.", 'wc-stock-notification'), $product_name),
+                'alternatives' => $this->get_alternative_products($product_id)
             ));
         }
-    } else {
-        // Insert new notification
-        $wpdb->insert(
-            $table_name,
-            array(
-                'email' => $email,
-                'product_id' => $product_id,
-                'date_added' => current_time('mysql')
-            )
-        );
+    }
 
+    private function get_alternative_products($product_id) {
         $product = wc_get_product($product_id);
-        $product_name = $product ? $product->get_name() : 'this product';
+        $cat_ids = $product->get_category_ids();
+        $tags = wp_get_post_terms($product_id, 'product_tag', array('fields' => 'ids'));
 
-        wp_send_json_success(array(
-            'message' => "Thank you! We've added your email to the notification list for {$product_name}. We'll let you know as soon as it's back in stock.",
-            'alternatives' => get_alternative_products($product_id)
-        ));
-    }
-}
-
-
-// Function to get alternative products
-function get_alternative_products($product_id) {
-    $product = wc_get_product($product_id);
-    $cat_ids = $product->get_category_ids();
-    $tags = wp_get_post_terms($product_id, 'product_tag', array('fields' => 'ids'));
-
-    $args = array(
-        'category' => $cat_ids,
-        'tag' => $tags,
-        'posts_per_page' => 5,
-        'post__not_in' => array($product_id),
-        'post_status' => 'publish',
-        'meta_query' => array(
-            array(
-                'key' => '_stock_status',
-                'value' => 'instock'
+        $args = array(
+            'category' => $cat_ids,
+            'tag' => $tags,
+            'posts_per_page' => 5,
+            'post__not_in' => array($product_id),
+            'post_status' => 'publish',
+            'meta_query' => array(
+                array(
+                    'key' => '_stock_status',
+                    'value' => 'instock'
+                )
             )
-        )
-    );
+        );
 
-    $products = wc_get_products($args);
+        $products = wc_get_products($args);
 
-    $alternatives = array();
-    foreach ($products as $product) {
-        $alternatives[] = array(
-            'id' => $product->get_id(),
-            'name' => $product->get_name(),
-            'url' => get_permalink($product->get_id()),
-            'price' => $product->get_price(),
-            'image' => wp_get_attachment_url($product->get_image_id())
+        $alternatives = array();
+        foreach ($products as $product) {
+            $alternatives[] = array(
+                'id' => $product->get_id(),
+                'name' => $product->get_name(),
+                'url' => get_permalink($product->get_id()),
+                'price' => $product->get_price(),
+                'image' => wp_get_attachment_url($product->get_image_id())
+            );
+        }
+
+        return $alternatives;
+    }
+
+    public function activate() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'stock_notifications';
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE $table_name (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            email varchar(100) NOT NULL,
+            product_id bigint(20) NOT NULL,
+            date_added datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+
+        add_option('stock_notification_email_template', $this->get_default_email_template());
+    }
+
+    public function send_stock_notifications($product_id) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'stock_notifications';
+
+        $notifications = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM $table_name WHERE product_id = %d",
+            $product_id
+        ));
+
+        $email_template = get_option('stock_notification_email_template', $this->get_default_email_template());
+        $product = wc_get_product($product_id);
+
+        foreach ($notifications as $notification) {
+            $to = $notification->email;
+            $subject = sprintf(__('Product Back in Stock: %s', 'wc-stock-notification'), $product->get_name());
+
+            $message = str_replace(
+                array('{product_name}', '{product_url}', '{site_name}'),
+                array($product->get_name(), get_permalink($product_id), get_bloginfo('name')),
+                $email_template
+            );
+
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+
+            wp_mail($to, $subject, $message, $headers);
+
+            $wpdb->delete($table_name, array('id' => $notification->id));
+        }
+    }
+
+    public function add_admin_menu() {
+        add_menu_page(
+            __('Stock Notifications', 'wc-stock-notification'),
+            __('Stock Notifications', 'wc-stock-notification'),
+            'manage_options',
+            'stock-notifications',
+            array($this, 'admin_page'),
+            'dashicons-email-alt'
+        );
+        add_submenu_page(
+            'stock-notifications',
+            __('Export Notifications', 'wc-stock-notification'),
+            __('Export CSV', 'wc-stock-notification'),
+            'manage_options',
+            'stock-notifications-export',
+            array($this, 'export_page')
+        );
+        add_submenu_page(
+            'stock-notifications',
+            __('Notification Settings', 'wc-stock-notification'),
+            __('Settings', 'wc-stock-notification'),
+            'manage_options',
+            'stock-notifications-settings',
+            array($this, 'settings_page')
         );
     }
 
-    return $alternatives;
-}
+    public function admin_page() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'stock_notifications';
 
-// Create database table on plugin activation
-register_activation_hook(__FILE__, 'stock_notification_activate');
-function stock_notification_activate() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
-    $charset_collate = $wpdb->get_charset_collate();
+        if (isset($_POST['email_template'])) {
+            update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
+            echo '<div class="updated"><p>' . esc_html__('Email template updated.', 'wc-stock-notification') . '</p></div>';
+        }
 
-    $sql = "CREATE TABLE $table_name (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        email varchar(100) NOT NULL,
-        product_id bigint(20) NOT NULL,
-        date_added datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-        PRIMARY KEY  (id)
-    ) $charset_collate;";
+        $notifications = $wpdb->get_results("SELECT * FROM $table_name ORDER BY date_added DESC");
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
+        include(plugin_dir_path(__FILE__) . 'templates/admin-page.php');
+    }
 
-    // Add default email template
-    add_option('stock_notification_email_template', 'Hello,
+    public function export_page() {
+        if (isset($_POST['export_csv'])) {
+            $this->generate_csv();
+        }
 
-The product "{product_name}" is now back in stock!
+        include(plugin_dir_path(__FILE__) . 'templates/export-page.php');
+    }
 
-You can purchase it here: {product_url}
+    private function generate_csv() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'stock_notifications';
 
-Thank you for your interest.
+        $notifications = $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
 
-Best regards,
-{site_name}');
-}
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="stock_notifications.csv"');
 
-// Send notifications when stock status changes
-add_action('woocommerce_product_set_stock_status', 'send_stock_notifications', 10, 3);
-function send_stock_notifications($product_id) {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
+        $output = fopen('php://output', 'w');
+        fputcsv($output, array('ID', 'Email', 'Product ID', 'Date Added'));
 
-    $notifications = $wpdb->get_results($wpdb->prepare(
-        "SELECT * FROM $table_name WHERE product_id = %d",
-        $product_id
-    ));
+        foreach ($notifications as $notification) {
+            fputcsv($output, $notification);
+        }
 
-    $email_template = get_option('stock_notification_email_template', get_default_email_template());
-    $product = wc_get_product($product_id);
+        fclose($output);
+        exit;
+    }
 
-    foreach ($notifications as $notification) {
-        $to = $notification->email;
-        $subject = 'Product Back in Stock: ' . $product->get_name();
+    public function settings_page() {
+        if (isset($_POST['submit_settings'])) {
+            update_option('stock_notification_threshold', intval($_POST['notification_threshold']));
+            update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
+            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'wc-stock-notification') . '</p></div>';
+        }
 
-        $message = str_replace(
-            array('{product_name}', '{product_url}', '{site_name}'),
-            array($product->get_name(), get_permalink($product_id), get_bloginfo('name')),
-            $email_template
+        $threshold = get_option('stock_notification_threshold', 1);
+        $email_template = get_option('stock_notification_email_template', $this->get_default_email_template());
+
+        include(plugin_dir_path(__FILE__) . 'templates/settings-page.php');
+    }
+
+    public function add_dashboard_widget() {
+        wp_add_dashboard_widget(
+            'stock_notification_dashboard_widget',
+            __('Stock Notification Statistics', 'wc-stock-notification'),
+            array($this, 'dashboard_widget_function')
         );
-
-        $headers = array('Content-Type: text/html; charset=UTF-8');
-
-        wp_mail($to, $subject, $message, $headers);
-
-        // Remove the notification from the database
-        $wpdb->delete($table_name, array('id' => $notification->id));
-    }
-}
-
-// Add admin menu
-add_action('admin_menu', 'stock_notification_admin_menu');
-function stock_notification_admin_menu() {
-    add_menu_page('Stock Notifications', 'Stock Notifications', 'manage_options', 'stock-notifications', 'stock_notification_admin_page', 'dashicons-email-alt');
-}
-
-// Admin page content
-function stock_notification_admin_page() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
-
-    // Handle email template update
-    if (isset($_POST['email_template'])) {
-        update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
-        echo '<div class="updated"><p>Email template updated.</p></div>';
     }
 
-    // Get notifications
-    $notifications = $wpdb->get_results("SELECT * FROM $table_name ORDER BY date_added DESC");
+    public function dashboard_widget_function() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'stock_notifications';
 
-    // Display admin page
-    echo '<div class="wrap">';
-    echo '<h1>Stock Notifications</h1>';
+        $total_notifications = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
+        $unique_products = $wpdb->get_var("SELECT COUNT(DISTINCT product_id) FROM $table_name");
+        $unique_emails = $wpdb->get_var("SELECT COUNT(DISTINCT email) FROM $table_name");
 
-    // Email template form
-    echo '<h2>Email Template</h2>';
-    echo '<form method="post">';
-    echo '<textarea name="email_template" rows="10" cols="50">' . esc_textarea(get_option('stock_notification_email_template')) . '</textarea>';
-    echo '<p>Available placeholders: {product_name}, {product_url}, {site_name}</p>';
-    echo '<input type="submit" class="button button-primary" value="Update Email Template">';
-    echo '</form>';
-
-    // Notifications table
-    echo '<h2>Current Notifications</h2>';
-    echo '<table class="widefat">';
-    echo '<thead><tr><th>Email</th><th>Product</th><th>Date Added</th></tr></thead>';
-    echo '<tbody>';
-    foreach ($notifications as $notification) {
-        $product = wc_get_product($notification->product_id);
-        echo '<tr>';
-        echo '<td>' . esc_html($notification->email) . '</td>';
-        echo '<td>' . ($product ? esc_html($product->get_name()) : 'Product not found') . '</td>';
-        echo '<td>' . esc_html($notification->date_added) . '</td>';
-        echo '</tr>';
+        include(plugin_dir_path(__FILE__) . 'templates/dashboard-widget.php');
     }
-    echo '</tbody>';
-    echo '</table>';
 
-    echo '</div>';
-}
+    public function check_stock_and_notify($product) {
+        $product_id = $product->get_id();
+        $stock_quantity = $product->get_stock_quantity();
+        $notification_threshold = get_option('stock_notification_threshold', 1);
 
-// Rate limiting function
-function is_rate_limited($email) {
-    $transient_name = 'stock_notify_' . md5($email);
-    $count = get_transient($transient_name);
+        if ($stock_quantity >= $notification_threshold) {
+            $this->send_stock_notifications($product_id);
+        }
+    }
 
-    if ($count === false) {
-        set_transient($transient_name, 1, HOUR_IN_SECONDS);
+    private function is_rate_limited($email) {
+        $transient_name = 'stock_notify_' . md5($email);
+        $count = get_transient($transient_name);
+
+        if ($count === false) {
+            set_transient($transient_name, 1, HOUR_IN_SECONDS);
+            return false;
+        }
+
+        if ($count >= 5) {
+            return true;
+        }
+
+        set_transient($transient_name, $count + 1, HOUR_IN_SECONDS);
         return false;
     }
 
-    if ($count >= 5) {
-        return true;
-    }
+    private function get_default_email_template() {
+        return __(
+            "Hello,
 
-    set_transient($transient_name, $count + 1, HOUR_IN_SECONDS);
-    return false;
-}
-
-
-add_action('wp_ajax_unsubscribe_stock_notification', 'unsubscribe_stock_notification');
-add_action('wp_ajax_nopriv_unsubscribe_stock_notification', 'unsubscribe_stock_notification');
-function unsubscribe_stock_notification() {
-    $email = sanitize_email($_POST['email']);
-    $product_id = intval($_POST['product_id']);
-    $token = sanitize_text_field($_POST['token']);
-
-    if (!$email || !$product_id || !$token) {
-        wp_send_json_error('Invalid unsubscribe data');
-    }
-
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
-
-    $result = $wpdb->delete(
-        $table_name,
-        array(
-            'email' => $email,
-            'product_id' => $product_id
-        )
-    );
-
-    if ($result) {
-        wp_send_json_success('You have been unsubscribed successfully.');
-    } else {
-        wp_send_json_error('Unable to unsubscribe. Please try again.');
-    }
-}
-
-// Add admin dashboard widget
-add_action('wp_dashboard_setup', 'stock_notification_add_dashboard_widget');
-function stock_notification_add_dashboard_widget() {
-    wp_add_dashboard_widget(
-        'stock_notification_dashboard_widget',
-        'Stock Notification Statistics',
-        'stock_notification_dashboard_widget_function'
-    );
-}
-
-function stock_notification_dashboard_widget_function() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
-
-    $total_notifications = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
-    $unique_products = $wpdb->get_var("SELECT COUNT(DISTINCT product_id) FROM $table_name");
-    $unique_emails = $wpdb->get_var("SELECT COUNT(DISTINCT email) FROM $table_name");
-
-    echo "<p>Total Notifications: $total_notifications</p>";
-    echo "<p>Unique Products: $unique_products</p>";
-    echo "<p>Unique Subscribers: $unique_emails</p>";
-}
-
-// Add export to CSV functionality
-add_action('admin_menu', 'stock_notification_export_menu');
-function stock_notification_export_menu() {
-    add_submenu_page(
-        'stock-notifications',
-        'Export Notifications',
-        'Export CSV',
-        'manage_options',
-        'stock-notifications-export',
-        'stock_notification_export_page'
-    );
-}
-
-function stock_notification_export_page() {
-    if (isset($_POST['export_csv'])) {
-        stock_notification_generate_csv();
-    }
-
-    echo '<div class="wrap">';
-    echo '<h1>Export Stock Notifications</h1>';
-    echo '<form method="post">';
-    echo '<input type="submit" name="export_csv" class="button button-primary" value="Export to CSV">';
-    echo '</form>';
-    echo '</div>';
-}
-
-function stock_notification_generate_csv() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'stock_notifications';
-
-    $notifications = $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
-
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="stock_notifications.csv"');
-
-    $output = fopen('php://output', 'w');
-    fputcsv($output, array('ID', 'Email', 'Product ID', 'Date Added'));
-
-    foreach ($notifications as $notification) {
-        fputcsv($output, $notification);
-    }
-
-    fclose($output);
-    exit;
-}
-
-// Integrate with WooCommerce stock management
-add_action('woocommerce_product_set_stock', 'check_stock_and_notify');
-function check_stock_and_notify($product) {
-    $product_id = $product->get_id();
-    $stock_quantity = $product->get_stock_quantity();
-    $notification_threshold = get_option('stock_notification_threshold', 1);
-
-    if ($stock_quantity >= $notification_threshold) {
-        send_stock_notifications($product_id);
-    }
-}
-
-// Add settings page for customizable notification threshold
-add_action('admin_menu', 'stock_notification_settings_menu');
-function stock_notification_settings_menu() {
-    add_submenu_page(
-        'stock-notifications',
-        'Notification Settings',
-        'Settings',
-        'manage_options',
-        'stock-notifications-settings',
-        'stock_notification_settings_page'
-    );
-}
-
-function stock_notification_settings_page() {
-    if (isset($_POST['submit_settings'])) {
-        // Save notification threshold
-        update_option('stock_notification_threshold', intval($_POST['notification_threshold']));
-
-        // Save email template
-        update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
-
-        echo '<div class="updated"><p>Settings saved.</p></div>';
-    }
-
-    $threshold = get_option('stock_notification_threshold', 1);
-    $email_template = get_option('stock_notification_email_template', get_default_email_template());
-
-    ?>
-    <div class="wrap">
-        <h1>Stock Notification Settings</h1>
-        <form method="post">
-            <h2>Notification Threshold</h2>
-            <label for="notification_threshold">Notification Threshold:</label>
-            <input type="number" id="notification_threshold" name="notification_threshold" value="<?php echo esc_attr($threshold); ?>" min="1">
-            <p class="description">Send notifications when stock reaches or exceeds this number.</p>
-
-            <h2>Email Template</h2>
-            <p>Customize the email sent to customers when a product is back in stock. You can use the following placeholders:</p>
-            <ul>
-                <li><code>{product_name}</code> - The name of the product</li>
-                <li><code>{product_url}</code> - The URL of the product page</li>
-                <li><code>{site_name}</code> - The name of your website</li>
-            </ul>
-            <textarea name="email_template" rows="10" cols="50" class="large-text code"><?php echo esc_textarea($email_template); ?></textarea>
-
-            <p class="submit">
-                <input type="submit" name="submit_settings" class="button button-primary" value="Save Settings">
-            </p>
-        </form>
-    </div>
-    <?php
-}
-
-function get_default_email_template() {
-    return <<<EOT
-Hello,
-
-Great news! The product "{product_name}" is now back in stock at {site_name}.
+Great news! The product \"{product_name}\" is now back in stock at {site_name}.
 
 You can purchase it here: {product_url}
 
 Thank you for your patience and interest in our products.
 
 Best regards,
-The team at {site_name}
-EOT;
+The team at {site_name}",
+            'wc-stock-notification'
+        );
+    }
 }
+
+function WC_Stock_Notification() {
+    return WC_Stock_Notification::get_instance();
+}
+
+WC_Stock_Notification();
