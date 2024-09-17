@@ -46,7 +46,7 @@ defined('ABSPATH') || exit;
                 <?php endforeach; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan="3"><?php esc_html_e('No notifications found.', 'stock-alert'); ?></td>
+                    <td colspan="4" class="no-info"><?php esc_html_e('No notifications found.', 'stock-alert'); ?></td>
                 </tr>
             <?php endif; ?>
         </tbody>

@@ -89,93 +89,40 @@ class Stock_Notifications_Menu {
     public function settings_page() {
         if (isset($_POST['submit_settings'])) {
             update_option('stock_notification_threshold', intval($_POST['notification_threshold']));
-            update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
+            update_option('stock_notification_email_templates', wp_kses_post($_POST['email_templates']));
             echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-alert') . '</p></div>';
         }
 
         $threshold = get_option('stock_notification_threshold', 1);
-        $email_template = get_option('stock_notification_email_template', $this->get_default_email_template());
+        $email_templates = get_option('stock_notification_email_templates', $this->get_default_email_templates());
 
         include(STOCK_ALERT_PATH . 'templates/settings-page.php');
     }
 
-    private function get_default_email_template() {
+    private function get_default_email_templates() {
         return __(
             '<html>
-            <head>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        color: #333;
-                        line-height: 1.6;
-                        margin: 0;
-                        padding: 0;
-                        background-color: #f9f9f9;
-                    }
-                    .email-container {
-                        max-width: 600px;
-                        margin: 0 auto;
-                        background-color: #ffffff;
-                        border: 1px solid #e0e0e0;
-                        border-radius: 8px;
-                        overflow: hidden;
-                    }
-                    .email-header {
-                        background-color: #0073aa;
-                        color: #ffffff;
-                        padding: 20px;
-                        text-align: center;
-                    }
-                    .email-header h1 {
-                        margin: 0;
-                        font-size: 24px;
-                    }
-                    .email-body {
-                        padding: 20px;
-                    }
-                    .email-body p {
-                        margin: 0 0 15px;
-                    }
-                    .email-footer {
-                        background-color: #f1f1f1;
-                        text-align: center;
-                        padding: 10px;
-                        font-size: 12px;
-                        color: #666;
-                    }
-                    .button {
-                        display: inline-block;
-                        padding: 10px 20px;
-                        margin: 10px 0;
-                        background-color: #0073aa;
-                        color: #ffffff;
-                        text-decoration: none;
-                        border-radius: 4px;
-                        font-weight: bold;
-                    }
-                    .button:hover {
-                        background-color: #005177;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="email-container">
-                    <div class="email-header">
-                        <h1>Product Back in Stock</h1>
+                <head>
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" type="text/css">
+                </head>
+                <body style="font-family: Roboto, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: #f5f9fc;">
+                    <div style="max-width: 600px;margin: 0 auto;overflow: hidden;box-shadow: 0px 3px 3px -1px rgba(10, 22, 70, .1), 0px 0px 1px 0px rgba(10, 22, 70, .06) !important;background-color: #fff;background-clip: border-box;border: 1px solid #eceef3;border-radius: 6px;">
+                        <div style="background-color: #5c60f5; color: #ffffff; padding: 20px; text-align: center;">
+                            <h1 style="margin: 0; font-size: 24px; font-weight: 600;">Product Back in Stock</h1>
+                        </div>
+                        <div style="padding: 20px;">
+                            <p>Hello,</p>
+                            <p>Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.</p>
+                            <p>You can purchase it here: <a href="{product_url}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #5c60f5; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">Buy Now</a></p>
+                            <p>Thank you for your patience and interest in our products.</p>
+                            <p>Best regards,</p>
+                            <p>The team at <strong>{site_name}</strong></p>
+                        </div>
+                        <div style="background-color: #f1f1f1; text-align: center; padding: 10px; font-size: 12px; color: #16192c;">
+                            <p>&copy; 2024 {site_name}. All rights reserved.</p>
+                        </div>
                     </div>
-                    <div class="email-body">
-                        <p>Hello,</p>
-                        <p>Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.</p>
-                        <p>You can purchase it here: <a href="{product_url}" class="button">Buy Now</a></p>
-                        <p>Thank you for your patience and interest in our products.</p>
-                        <p>Best regards,</p>
-                        <p>The team at <strong>{site_name}</strong></p>
-                    </div>
-                    <div class="email-footer">
-                        <p>&copy; {year} {site_name}. All rights reserved.</p>
-                    </div>
-                </div>
-            </body>
+                </body>
             </html>',
             'stock-alert'
         );
@@ -211,7 +158,7 @@ class Stock_Notifications_Menu {
         if ($existing_notification) {
             $time_difference = current_time('timestamp') - strtotime($existing_notification->date_added);
             if ($time_difference < 24 * 60 * 60) {
-                wp_send_json_error(__('You have already subscribed to notifications for this product. Please wait 24 hours before trying again.', 'stock-alert'));
+                wp_send_json_error(__('You have already subscribed to notifications for this product.', 'stock-alert'));
             } else {
                 $wpdb->update(
                     $table_name,
@@ -287,7 +234,7 @@ class Stock_Notifications_Menu {
             $product_id
         ));
 
-        $email_template = get_option('stock_notification_email_template', $this->get_default_email_template());
+        $email_templates = get_option('stock_notification_email_templates', $this->get_default_email_templates());
         $product = wc_get_product($product_id);
 
         foreach ($notifications as $notification) {
@@ -297,7 +244,7 @@ class Stock_Notifications_Menu {
             $message = str_replace(
                 array('{product_name}', '{product_url}', '{site_name}'),
                 array($product->get_name(), get_permalink($product_id), get_bloginfo('name')),
-                $email_template
+                $email_templates
             );
 
             $headers = array('Content-Type: text/html; charset=UTF-8');
