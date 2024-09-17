@@ -20,7 +20,7 @@ class Admin {
     public function add_dashboard_widget() {
         wp_add_dashboard_widget(
             'stock_notification_dashboard_widget',
-            __('Stock Notification Statistics', 'wc-stock-notification'),
+            __('Stock Notification Statistics', 'stock-alert'),
             array($this, 'dashboard_widget_function')
         );
     }

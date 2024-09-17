@@ -25,11 +25,11 @@ class Add_Notify_Me_Button {
     public function add_notify_me_button() {
         global $product;
         if (!$product->is_in_stock()) {
-            echo '<button class="button" id="notify-me-button">' . esc_html__('Notify Me When Available', 'wc-stock-notification') . '</button>';
+            echo '<button class="button" id="notify-me-button">' . esc_html__('Notify Me When Available', 'stock-alert') . '</button>';
             echo '<div id="notify-me-form" style="display:none;">
-                    <input type="email" id="notify-email" placeholder="' . esc_attr__('Enter your email', 'wc-stock-notification') . '">
+                    <input type="email" id="notify-email" placeholder="' . esc_attr__('Enter your email', 'stock-alert') . '">
                     <input type="hidden" id="notify-product-id" value="' . esc_attr($product->get_id()) . '">
-                    <button id="submit-notify">' . esc_html__('Submit', 'wc-stock-notification') . '</button>
+                    <button id="submit-notify">' . esc_html__('Submit', 'stock-alert') . '</button>
                   </div>';
         }
     }

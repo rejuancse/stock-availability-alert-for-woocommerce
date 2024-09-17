@@ -24,8 +24,8 @@ class Stock_Notifications_Menu {
 
     public function add_admin_menu() {
         add_menu_page(
-            __('Stock Notifications', 'wc-stock-notification'),
-            __('Stock Notifications', 'wc-stock-notification'),
+            __('Stock Notifications', 'stock-alert'),
+            __('Stock Notifications', 'stock-alert'),
             'manage_options',
             'stock-notifications',
             array($this, 'admin_page'),
@@ -33,16 +33,8 @@ class Stock_Notifications_Menu {
         );
         add_submenu_page(
             'stock-notifications',
-            __('Export Notifications', 'wc-stock-notification'),
-            __('Export CSV', 'wc-stock-notification'),
-            'manage_options',
-            'stock-notifications-export',
-            array($this, 'export_page')
-        );
-        add_submenu_page(
-            'stock-notifications',
-            __('Notification Settings', 'wc-stock-notification'),
-            __('Settings', 'wc-stock-notification'),
+            __('Notification Settings', 'stock-alert'),
+            __('Settings', 'stock-alert'),
             'manage_options',
             'stock-notifications-settings',
             array($this, 'settings_page')
@@ -51,24 +43,27 @@ class Stock_Notifications_Menu {
 
     public function admin_page() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'stock_notifications';
 
-        if (isset($_POST['email_template'])) {
-            update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
-            echo '<div class="updated"><p>' . esc_html__('Email template updated.', 'wc-stock-notification') . '</p></div>';
-        }
-
-        $notifications = $wpdb->get_results("SELECT * FROM $table_name ORDER BY date_added DESC");
-
-        include(STOCK_ALERT_PATH . 'templates/admin-page.php');
-    }
-
-    public function export_page() {
         if (isset($_POST['export_csv'])) {
             $this->generate_csv();
         }
 
-        include(STOCK_ALERT_PATH . 'templates/export-page.php');
+        $table_name = $wpdb->prefix . 'stock_notifications';
+
+        $items_per_page = 10;
+
+        $paged = isset($_GET['paged']) && is_numeric($_GET['paged']) ? intval($_GET['paged']) : 1;
+        $offset = ($paged - 1) * $items_per_page;
+
+        $total_notifications = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
+
+        $notifications = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM $table_name ORDER BY date_added DESC LIMIT %d OFFSET %d",
+            $items_per_page,
+            $offset
+        ));
+
+        include(STOCK_ALERT_PATH . 'templates/admin-page.php');
     }
 
     private function generate_csv() {
@@ -95,7 +90,7 @@ class Stock_Notifications_Menu {
         if (isset($_POST['submit_settings'])) {
             update_option('stock_notification_threshold', intval($_POST['notification_threshold']));
             update_option('stock_notification_email_template', wp_kses_post($_POST['email_template']));
-            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'wc-stock-notification') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-alert') . '</p></div>';
         }
 
         $threshold = get_option('stock_notification_threshold', 1);
@@ -106,14 +101,83 @@ class Stock_Notifications_Menu {
 
     private function get_default_email_template() {
         return __(
-            "Hello,
-            Great news! The product \"{product_name}\" is now back in stock at {site_name}.
-            You can purchase it here: {product_url}
-            Thank you for your patience and interest in our products.
-
-            Best regards,
-            The team at {site_name}",
-            'wc-stock-notification'
+            '<html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        color: #333;
+                        line-height: 1.6;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f9f9f9;
+                    }
+                    .email-container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        background-color: #ffffff;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }
+                    .email-header {
+                        background-color: #0073aa;
+                        color: #ffffff;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .email-header h1 {
+                        margin: 0;
+                        font-size: 24px;
+                    }
+                    .email-body {
+                        padding: 20px;
+                    }
+                    .email-body p {
+                        margin: 0 0 15px;
+                    }
+                    .email-footer {
+                        background-color: #f1f1f1;
+                        text-align: center;
+                        padding: 10px;
+                        font-size: 12px;
+                        color: #666;
+                    }
+                    .button {
+                        display: inline-block;
+                        padding: 10px 20px;
+                        margin: 10px 0;
+                        background-color: #0073aa;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 4px;
+                        font-weight: bold;
+                    }
+                    .button:hover {
+                        background-color: #005177;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <div class="email-header">
+                        <h1>Product Back in Stock</h1>
+                    </div>
+                    <div class="email-body">
+                        <p>Hello,</p>
+                        <p>Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.</p>
+                        <p>You can purchase it here: <a href="{product_url}" class="button">Buy Now</a></p>
+                        <p>Thank you for your patience and interest in our products.</p>
+                        <p>Best regards,</p>
+                        <p>The team at <strong>{site_name}</strong></p>
+                    </div>
+                    <div class="email-footer">
+                        <p>&copy; {year} {site_name}. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>',
+            'stock-alert'
         );
     }
 
@@ -122,15 +186,15 @@ class Stock_Notifications_Menu {
         $product_id = intval($_POST['product_id']);
 
         if (!is_email($email)) {
-            wp_send_json_error(__('Invalid email address', 'wc-stock-notification'));
+            wp_send_json_error(__('Invalid email address', 'stock-alert'));
         }
 
         if (!$product_id) {
-            wp_send_json_error(__('Invalid product ID', 'wc-stock-notification'));
+            wp_send_json_error(__('Invalid product ID', 'stock-alert'));
         }
 
         if ($this->is_rate_limited($email)) {
-            wp_send_json_error(__('Too many requests. Please try again later.', 'wc-stock-notification'));
+            wp_send_json_error(__('Too many requests. Please try again later.', 'stock-alert'));
         }
 
         global $wpdb;
@@ -147,7 +211,7 @@ class Stock_Notifications_Menu {
         if ($existing_notification) {
             $time_difference = current_time('timestamp') - strtotime($existing_notification->date_added);
             if ($time_difference < 24 * 60 * 60) {
-                wp_send_json_error(__('You have already subscribed to notifications for this product. Please wait 24 hours before trying again.', 'wc-stock-notification'));
+                wp_send_json_error(__('You have already subscribed to notifications for this product. Please wait 24 hours before trying again.', 'stock-alert'));
             } else {
                 $wpdb->update(
                     $table_name,
@@ -155,7 +219,7 @@ class Stock_Notifications_Menu {
                     array('id' => $existing_notification->id)
                 );
                 wp_send_json_success(array(
-                    'message' => __("Your notification subscription has been renewed for this product.", 'wc-stock-notification'),
+                    'message' => __("Your notification subscription has been renewed for this product.", 'stock-alert'),
                     'alternatives' => $this->get_alternative_products($product_id)
                 ));
             }
@@ -170,10 +234,10 @@ class Stock_Notifications_Menu {
             );
 
             $product = wc_get_product($product_id);
-            $product_name = $product ? $product->get_name() : __('this product', 'wc-stock-notification');
+            $product_name = $product ? $product->get_name() : __('this product', 'stock-alert');
 
             wp_send_json_success(array(
-                'message' => sprintf(__("Thank you! We've added your email to the notification list for %s. We'll let you know as soon as it's back in stock.", 'wc-stock-notification'), $product_name),
+                'message' => sprintf(__("Thank you! We've added your email to the notification list for %s. We'll let you know as soon as it's back in stock.", 'stock-alert'), $product_name),
                 'alternatives' => $this->get_alternative_products($product_id)
             ));
         }
@@ -228,7 +292,7 @@ class Stock_Notifications_Menu {
 
         foreach ($notifications as $notification) {
             $to = $notification->email;
-            $subject = sprintf(__('Product Back in Stock: %s', 'wc-stock-notification'), $product->get_name());
+            $subject = sprintf(__('Product Back in Stock: %s', 'stock-alert'), $product->get_name());
 
             $message = str_replace(
                 array('{product_name}', '{product_url}', '{site_name}'),

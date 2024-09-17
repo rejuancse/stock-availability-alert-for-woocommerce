@@ -122,4 +122,3 @@ function stock_availability_get_alert() {
 
 // Kick-off the plugin
 stock_availability_get_alert();
-
