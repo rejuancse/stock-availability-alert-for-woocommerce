@@ -32,8 +32,8 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
-                    // var unsubscribeLink = '<a href="#" class="unsubscribe-link" data-email="' + encodeURIComponent(email) + '" data-product="' + product_id + '">Unsubscribe</a>';
-                    // $('#notify-me-form').html('<p class="success-message">' + response.data.message + '</p><p>' + unsubscribeLink + '</p>');
+                    var unsubscribeLink = '<a href="#" class="unsubscribe-link" data-email="' + encodeURIComponent(email) + '" data-product="' + product_id + '">Unsubscribe</a>';
+                    $('#notify-me-form').html('<p class="success-message">' + response.data.message + '</p><p>' + unsubscribeLink + '</p>');
 
                     if (response.data.alternatives && response.data.alternatives.length > 0) {
                         var alternativesHtml = '<h3>In the meantime, you might also like:</h3><ul class="product-alternatives">';

@@ -26,7 +26,7 @@ class Add_Notify_Me_Button {
         global $product;
         if (!$product->is_in_stock()) {
             echo '<button class="button" id="notify-me-button">' . esc_html__('Notify Me When Available', 'stock-alert') . '</button>';
-            echo '<div id="notify-me-form" style="display:none;">
+            echo '<div id="notify-me-form">
                     <input type="email" id="notify-email" placeholder="' . esc_attr__('Enter your email', 'stock-alert') . '">
                     <input type="hidden" id="notify-product-id" value="' . esc_attr($product->get_id()) . '">
                     <button id="submit-notify">' . esc_html__('Submit', 'stock-alert') . '</button>

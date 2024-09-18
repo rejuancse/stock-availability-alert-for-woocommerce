@@ -18,7 +18,21 @@ defined('ABSPATH') || exit;
             <li><code>{product_url}</code> - <?php esc_html_e('The URL of the product page', 'stock-alert'); ?></li>
             <li><code>{site_name}</code> - <?php esc_html_e('The name of your website', 'stock-alert'); ?></li>
         </ul>
-        <textarea name="email_templates" rows="10" cols="50" class="large-text code"><?php echo esc_textarea($email_templates); ?></textarea>
+
+        <div class="email-template">
+            <?php
+                // Display the TinyMCE editor instead of a textarea.
+                $editor_settings = array(
+                    'textarea_name' => 'email_templates', // The name of the textarea
+                    'textarea_rows' => 20,
+                    'media_buttons' => true, // Hide the "Add Media" button
+                    'teeny'         => true, // Show full TinyMCE editor
+                    'quicktags'     => true,  // Enable quicktags (HTML mode)
+                );
+                wp_editor($email_templates, 'email_templates_editor', $editor_settings);
+            ?>
+        </div>
+
         <p class="submit">
             <input type="submit" name="submit_settings" class="button button-primary" value="<?php esc_attr_e('Save Settings', 'stock-alert'); ?>">
         </p>

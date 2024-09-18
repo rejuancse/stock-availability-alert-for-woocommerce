@@ -101,29 +101,43 @@ class Stock_Notifications_Menu {
 
     private function get_default_email_templates() {
         return __(
-            '<html>
-                <head>
-                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" type="text/css">
-                </head>
-                <body style="font-family: Roboto, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 0; background-color: #f5f9fc;">
-                    <div style="max-width: 600px;margin: 0 auto;overflow: hidden;box-shadow: 0px 3px 3px -1px rgba(10, 22, 70, .1), 0px 0px 1px 0px rgba(10, 22, 70, .06) !important;background-color: #fff;background-clip: border-box;border: 1px solid #eceef3;border-radius: 6px;">
-                        <div style="background-color: #5c60f5; color: #ffffff; padding: 20px; text-align: center;">
+            '<table class="body" style="border-collapse: collapse;border-spacing: 0;vertical-align: top;height: 100% !important;width: 100% !important;min-width: 100%;background-color: #f5f9fc;color: #444;font-family: Helvetica,sans-serif;font-weight: normal;padding: 0;margin: 0;text-align: left;font-size: 14px;line-height: 140%" border="0" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+              <tr style="padding: 0;vertical-align: top;text-align: left">
+                <td class="body-inner wp-mail-smtp" style="border-collapse: collapse !important;vertical-align: top;color: #444;font-family: Helvetica,sans-serif;font-weight: normal;padding: 0;margin: 0;font-size: 14px;line-height: 140%;text-align: center" align="center" valign="top">
+                  <table class="container" style="border-collapse: collapse;border-spacing: 0;padding: 0;vertical-align: top;width: 600px;margin: 20px auto 0;text-align: inherit" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div style="background-color: #5c60f5; color: #ffffff; padding: 20px; text-align: center;">
                             <h1 style="margin: 0; font-size: 24px; font-weight: 600;">Product Back in Stock</h1>
-                        </div>
-                        <div style="padding: 20px;">
-                            <p>Hello,</p>
-                            <p>Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.</p>
-                            <p>You can purchase it here: <a href="{product_url}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #5c60f5; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">Buy Now</a></p>
-                            <p>Thank you for your patience and interest in our products.</p>
-                            <p>Best regards,</p>
-                            <p>The team at <strong>{site_name}</strong></p>
-                        </div>
-                        <div style="background-color: #f1f1f1; text-align: center; padding: 10px; font-size: 12px; color: #16192c;">
-                            <p>&copy; 2024 {site_name}. All rights reserved.</p>
-                        </div>
-                    </div>
-                </body>
-            </html>',
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class="container" style="border-collapse: collapse;border-spacing: 0;padding: 0;vertical-align: top;width: 600px;margin: 0 auto 30px auto;text-align: inherit" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr style="padding: 0;vertical-align: top;text-align: left">
+                        <td class="content" style="border-collapse: collapse !important;vertical-align: top;color: #444;font-family: Helvetica,sans-serif;font-weight: normal;margin: 0;text-align: left;font-size: 14px;line-height: 140%;padding: 60px 75px 45px 75px;box-shadow: 0px 3px 3px -1px rgba(10, 22, 70, .1), 0px 0px 1px 0px rgba(10, 22, 70, .06) !important;position: relative;display: flex;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid #eceef3;" align="left" valign="top">
+                          <div class="success">
+                            <p class="text-large" style="color: #444;font-family: Helvetica,Arial,sans-serif;font-weight: normal;padding: 0;text-align: left;line-height: 140%;margin: 0 0 15px 0;font-size: 14px">Hello,</p>
+                            <p class="text-large" style="color: #444;font-family: Helvetica,Arial,sans-serif;font-weight: normal;padding: 0;text-align: left;line-height: 140%;margin: 0 0 15px 0;font-size: 14px">Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>. </p>
+                            <p class="text-large" style="color: #444;font-family: Helvetica,Arial,sans-serif;font-weight: normal;padding: 0;text-align: left;line-height: 140%;margin: 0 0 15px 0;font-size: 14px">You can purchase it here: <a href="{product_url}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #5c60f5; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">Buy Now</a>
+                            </p>
+                            <p class="text-large" style="color: #444;font-family: Helvetica,Arial,sans-serif;font-weight: normal;padding: 0;text-align: left;line-height: 140%;margin: 0 0 15px 0;font-size: 14px">Thank you for your patience and interest in our products.</p>
+                            <p class="text-large" style="color: #444;font-family: Helvetica,Arial,sans-serif;font-weight: normal;padding: 0;text-align: left;line-height: 140%;margin: 0 0 15px 0;font-size: 14px">Best Regards,</p>
+                            <p class="text-large" style="color: #444;font-family: Helvetica,Arial,sans-serif;font-weight: normal;padding: 0;text-align: left;line-height: 140%;margin: 0 0 15px 0;font-size: 14px">The team at <strong>{site_name}</strong>
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>',
             'stock-alert'
         );
     }
