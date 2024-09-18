@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Stock Availability Alert
- * Description: Implement a notification system for out-of-stock items with advanced features including admin interface, better product suggestions, customizable emails, and rate limiting.
+ * Description: Boost sales with Stock Availability Alert for WooCommerce. Notify customers via email when products are back in stock. Features admin control and customization.
  * Version:           1.0.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
@@ -104,10 +104,15 @@ final class Stock_Availability_Alert {
     public function frontend_script(){
         wp_enqueue_style( 'stock-front', STOCK_ALERT_URL .'/assets/dist/css/notify-style.css', false, STOCK_ALERT_VERSION );
 
+        #JS
         wp_enqueue_script('stock-alert-notify-script', STOCK_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_ALERT_VERSION, true);
         wp_localize_script('stock-alert-notify-script', 'notify_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
     }
 
+    /**
+     * Registering necessary js and css
+     * @ Admin
+     */
     public function admin_script(){
         wp_enqueue_style( 'stock-admin', STOCK_ALERT_URL .'/assets/dist/css/stock-admin.css', false, STOCK_ALERT_VERSION );
     }

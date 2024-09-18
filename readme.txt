@@ -9,10 +9,10 @@ Stable tag:  1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Enhance your WooCommerce store with stunning product banner images. Showcase your products beautifully and boost sales effortlessly!
+Boost sales with Stock Availability Alert for WooCommerce. Notify customers via email when products are back in stock. Features admin control and customization.
 
 == Description ==
-The Enhanced Stock Availability Alert plugin helps admins create banners for their store's pages, including shop, category, single product, and individual product pages.
+Stock Availability Alert enhances WooCommerce by notifying customers when out-of-stock products are available again. Users can easily subscribe to notifications via email. The plugin features an intuitive admin interface, better product suggestions, customizable email templates, and rate limiting to manage notifications efficiently. Keep your customers engaged and drive sales with automatic stock alerts and a well-managed subscriber list.
 
 Banners offer an excellent opportunity to showcase products, promote sales and exclusive offers, and strengthen brand identity. Use banners to enhance user engagement and drive revenue growth.
 
