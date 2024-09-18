@@ -9,64 +9,59 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-#notify-me-button {
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+.notify-me-button-wrap {
+    margin-bottom: 20px;
 
-#notify-me-button:hover {
-    background-color: #0056b3;
-}
+    #notify-me-button {
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-#notify-me-form {
-    margin-top: 15px;
-}
+    #notify-me-form {
+        margin-top: 15px;
+        margin-bottom: 20px;
 
-#notify-email {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 14px;
-}
+        .error-message {
+            margin: 0;
+        }
+    }
 
-#submit-notify {
-    background-color: #28a745;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+    #notify-email {
+        width: 61%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        font-size: 16px;
+        box-shadow: none;
+        font-weight: 500;
+    }
 
-#submit-notify:hover {
-    background-color: #218838;
-}
+    #notify-me-form {
+        .form-fields {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    }
 
-.notification-message {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 14px;
-}
+    #submit-notify {
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-.notification-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
+    .success-message {
+        color: #0f834d;
+    }
 
-.notification-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    .error-message{
+        color: #e2401c;
+    }
 }

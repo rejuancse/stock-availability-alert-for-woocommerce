@@ -1,10 +1,6 @@
-<?php
-// templates/admin-page.php
-defined('ABSPATH') || exit;
-?>
+<?php defined('ABSPATH') || exit; ?>
 
 <div class="wrap stock-notifications">
-
     <div class="stock-header">
         <h1><?php esc_html_e('Stock Notifications', 'stock-alert'); ?></h1>
         <form method="post">
@@ -33,7 +29,8 @@ defined('ABSPATH') || exit;
                                 $image_id = $product->get_image_id(); // Get image ID
                                 $image_url = wp_get_attachment_image_url($image_id, 'thumbnail'); // Get image URL
                                 if ($image_url) {
-                                    echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($product->get_name()) . '" width="50" height="50" />';
+                                    echo '<img src="' . esc_url($image_url) . '"
+                                    alt="' . esc_attr($product->get_name()) . '" width="50" height="50" />';
                                 }
                                 echo $product ? esc_html($product->get_name()) : esc_html__('Product not found', 'stock-alert');
                                 ?>
@@ -53,20 +50,20 @@ defined('ABSPATH') || exit;
     </table>
 
     <?php
-    // Pagination links
-    $pagination_args = array(
-        'base' => add_query_arg('paged', '%#%'),
-        'format' => '',
-        'prev_text' => __('&laquo; Previous', 'stock-alert'),
-        'next_text' => __('Next &raquo;', 'stock-alert'),
-        'total' => ceil($total_notifications / $items_per_page),
-        'current' => $paged,
-    );
+        // Pagination links
+        $pagination_args = array(
+            'base' => add_query_arg('paged', '%#%'),
+            'format' => '',
+            'prev_text' => __('&laquo; Previous', 'stock-alert'),
+            'next_text' => __('Next &raquo;', 'stock-alert'),
+            'total' => ceil($total_notifications / $items_per_page),
+            'current' => $paged,
+        );
 
-    if ($pagination_args['total'] > 1) {
-        echo '<div class="pagination-container">';
-            echo paginate_links($pagination_args);
-        echo '</div>';
-    }
+        if ($pagination_args['total'] > 1) {
+            echo '<div class="pagination-container">';
+                echo paginate_links($pagination_args);
+            echo '</div>';
+        }
     ?>
 </div>

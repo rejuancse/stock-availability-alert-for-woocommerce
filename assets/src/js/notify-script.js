@@ -32,8 +32,7 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
-                    var unsubscribeLink = '<a href="#" class="unsubscribe-link" data-email="' + encodeURIComponent(email) + '" data-product="' + product_id + '">Unsubscribe</a>';
-                    $('#notify-me-form').html('<p class="success-message">' + response.data.message + '</p><p>' + unsubscribeLink + '</p>');
+                    $('#notify-me-form').html('<p class="success-message">' + response.data.message + '</p>');
 
                     if (response.data.alternatives && response.data.alternatives.length > 0) {
                         var alternativesHtml = '<h3>In the meantime, you might also like:</h3><ul class="product-alternatives">';
@@ -57,33 +56,6 @@ jQuery(document).ready(function($) {
             },
             complete: function() {
                 $('#submit-notify').prop('disabled', false).text('Submit');
-            }
-        });
-    });
-
-    $(document).on('click', '.unsubscribe-link', function(e) {
-        e.preventDefault();
-        var email = decodeURIComponent($(this).data('email'));
-        var product_id = $(this).data('product');
-
-        $.ajax({
-            url: notify_ajax.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'unsubscribe_stock_notification',
-                email: email,
-                product_id: product_id,
-                token: 'some_security_token' // In a real-world scenario, implement proper security measures
-            },
-            success: function(response) {
-                if (response.success) {
-                    $('#notify-me-form').html('<p class="success-message">' + response.data + '</p>');
-                } else {
-                    showError(response.data);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                showError('An error occurred while unsubscribing. Please try again later.');
             }
         });
     });

@@ -198,7 +198,7 @@ class Stock_Notifications_Menu {
             $product_name = $product ? $product->get_name() : __('this product', 'stock-alert');
 
             wp_send_json_success(array(
-                'message' => sprintf(__("Thank you! We've added your email to the notification list for %s. We'll let you know as soon as it's back in stock.", 'stock-alert'), $product_name),
+                'message' => sprintf(__("Thank you for subscribing! We'll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!", 'stock-alert'), $product_name),
                 'alternatives' => $this->get_alternative_products($product_id)
             ));
         }
