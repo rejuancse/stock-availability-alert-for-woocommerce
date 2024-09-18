@@ -18,7 +18,6 @@ class Stock_Notifications_Menu {
         add_action('wp_ajax_stock_notification', array($this, 'handle_stock_notification'));
         add_action('wp_ajax_nopriv_stock_notification', array($this, 'handle_stock_notification'));
         add_action('woocommerce_product_set_stock_status', array($this, 'send_stock_notifications'), 10, 3);
-
         add_action('woocommerce_product_set_stock', array($this, 'check_stock_and_notify'));
     }
 
