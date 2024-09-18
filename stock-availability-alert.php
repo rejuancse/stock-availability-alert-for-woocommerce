@@ -122,37 +122,3 @@ function stock_availability_get_alert() {
 
 // Kick-off the plugin
 stock_availability_get_alert();
-
-
-
-function handle_bulk_action_stock_notifications() {
-    if (!isset($_POST['submit_bulk_action']) || !isset($_POST['bulk_action_nonce']) || !wp_verify_nonce($_POST['bulk_action_nonce'], 'bulk_action')) {
-        return;
-    }
-
-    if (isset($_POST['notifications']) && is_array($_POST['notifications'])) {
-        $action = sanitize_text_field($_POST['bulk_action']);
-
-        if ($action === 'delete') {
-            foreach ($_POST['notifications'] as $notification_id) {
-                // Assuming you have a function to delete a notification by ID
-                delete_stock_notification($notification_id);
-            }
-
-            // Optionally, you can add an admin notice after deletion
-            add_action('admin_notices', function() {
-                echo '<div class="notice notice-success is-dismissible">';
-                echo '<p>' . esc_html__('Selected notifications have been deleted.', 'stock-alert') . '</p>';
-                echo '</div>';
-            });
-        }
-    }
-}
-add_action('admin_init', 'handle_bulk_action_stock_notifications');
-
-
-function delete_stock_notification($notification_id) {
-    global $wpdb;
-    $table = $wpdb->prefix . 'stock_notifications'; // Assuming this is your table
-    $wpdb->delete($table, array('id' => intval($notification_id)), array('%d'));
-}

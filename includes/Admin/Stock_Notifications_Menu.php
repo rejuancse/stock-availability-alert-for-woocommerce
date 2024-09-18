@@ -2,9 +2,19 @@
 
 namespace StockAlert\Admin;
 
+/**
+ * Class Stock_Notifications_Menu
+ *
+ * Handles the admin menu for stock notifications and associated functionalities.
+ */
 class Stock_Notifications_Menu {
     private static $instance = null;
 
+    /**
+     * Retrieves the singleton instance of the class.
+     *
+     * @return Stock_Notifications_Menu Singleton instance.
+     */
     public static function get_instance() {
         if (null === self::$instance) {
             self::$instance = new self();
@@ -12,15 +22,21 @@ class Stock_Notifications_Menu {
         return self::$instance;
     }
 
+    /**
+     * Constructor: Hooks the methods to the appropriate WordPress actions.
+     */
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
-
         add_action('wp_ajax_stock_notification', array($this, 'handle_stock_notification'));
         add_action('wp_ajax_nopriv_stock_notification', array($this, 'handle_stock_notification'));
         add_action('woocommerce_product_set_stock_status', array($this, 'send_stock_notifications'), 10, 3);
         add_action('woocommerce_product_set_stock', array($this, 'check_stock_and_notify'));
+        add_action('admin_init', array($this, 'handle_bulk_action_stock_notifications'));
     }
 
+    /**
+     * Adds the Stock Notifications menu and submenus to the WordPress admin.
+     */
     public function add_admin_menu() {
         add_menu_page(
             __('Stock Notifications', 'stock-alert'),
@@ -40,6 +56,9 @@ class Stock_Notifications_Menu {
         );
     }
 
+    /**
+     * Displays the main admin page for stock notifications.
+     */
     public function admin_page() {
         global $wpdb;
 
@@ -65,6 +84,9 @@ class Stock_Notifications_Menu {
         include(STOCK_ALERT_PATH . 'templates/admin-page.php');
     }
 
+    /**
+     * Generates and outputs a CSV file of stock notifications.
+     */
     private function generate_csv() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
@@ -85,6 +107,9 @@ class Stock_Notifications_Menu {
         exit;
     }
 
+    /**
+     * Displays the settings page for stock notifications.
+     */
     public function settings_page() {
         if (isset($_POST['submit_settings'])) {
             update_option('stock_notification_threshold', intval($_POST['notification_threshold']));
@@ -98,6 +123,11 @@ class Stock_Notifications_Menu {
         include(STOCK_ALERT_PATH . 'templates/settings-page.php');
     }
 
+    /**
+     * Returns the default email templates for stock notifications.
+     *
+     * @return string Default email templates.
+     */
     private function get_default_email_templates() {
         return __(
             '<table class="body" style="border-collapse: collapse;border-spacing: 0;vertical-align: top;height: 100% !important;width: 100% !important;min-width: 100%;background-color: #f5f9fc;color: #444;font-family: Helvetica,sans-serif;font-weight: normal;padding: 0;margin: 0;text-align: left;font-size: 14px;line-height: 140%" border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -136,11 +166,13 @@ class Stock_Notifications_Menu {
                 </td>
               </tr>
             </tbody>
-          </table>',
-            'stock-alert'
+          </table>'
         );
     }
 
+    /**
+     * Handles the stock notification AJAX request.
+     */
     public function handle_stock_notification() {
         $email = sanitize_email($_POST['email']);
         $product_id = intval($_POST['product_id']);
@@ -238,6 +270,13 @@ class Stock_Notifications_Menu {
         return $alternatives;
     }
 
+    /**
+     * Sends stock notifications to users when product stock status changes.
+     *
+     * @param int $product_id Product ID.
+     * @param string $stock_status New stock status.
+     * @param int $old_stock_status Old stock status.
+     */
     public function send_stock_notifications($product_id) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
@@ -268,6 +307,11 @@ class Stock_Notifications_Menu {
         }
     }
 
+    /**
+     * Checks stock levels and notifies users if necessary.
+     *
+     * @param int $product_id Product ID.
+     */
     public function check_stock_and_notify($product) {
         $product_id = $product->get_id();
         $stock_quantity = $product->get_stock_quantity();
@@ -293,5 +337,36 @@ class Stock_Notifications_Menu {
 
         set_transient($transient_name, $count + 1, HOUR_IN_SECONDS);
         return false;
+    }
+
+    /**
+     * Handles bulk actions for stock notifications.
+     */
+    public function handle_bulk_action_stock_notifications() {
+        if (!isset($_POST['submit_bulk_action']) || !isset($_POST['bulk_action_nonce']) || !wp_verify_nonce($_POST['bulk_action_nonce'], 'bulk_action')) {
+            return;
+        }
+
+        if (isset($_POST['notifications']) && is_array($_POST['notifications'])) {
+            $action = sanitize_text_field($_POST['bulk_action']);
+
+            if ($action === 'delete') {
+                foreach ($_POST['notifications'] as $notification_id) {
+                    $this->delete_stock_notification($notification_id);
+                }
+
+                add_action('admin_notices', function() {
+                    echo '<div class="notice notice-success is-dismissible">';
+                    echo '<p>' . esc_html__('Selected notifications have been deleted.', 'stock-alert') . '</p>';
+                    echo '</div>';
+                });
+            }
+        }
+    }
+
+    private function delete_stock_notification($notification_id) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'stock_notifications'; // Assuming this is your table
+        $wpdb->delete($table, array('id' => intval($notification_id)), array('%d'));
     }
 }

@@ -17,13 +17,13 @@
                 <input type="submit" name="submit_bulk_action" class="button action" value="<?php esc_attr_e('Apply', 'stock-alert'); ?>">
             </div>
 
-            <div class="note-export-csv">
+            <div class="notification-count">
                 <span class="displaying-num"><?php echo ' ' . esc_html($total_notifications) . ' ' . __('items', 'stock-alert'); ?></span>
 
-                <form method="post">
+                <div class="export_csv">
                     <?php wp_nonce_field('stock_notification_export', 'stock_notification_export_nonce'); ?>
                     <input type="submit" name="export_csv" class="button button-primary" value="<?php esc_attr_e('Export to CSV', 'stock-alert'); ?>">
-                </form>
+                </div>
             </div>
         </div>
 
