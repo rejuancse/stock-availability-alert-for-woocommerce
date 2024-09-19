@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Stock Availability Alert
+ * Plugin Name: Stock Availability Alert for WooCommerce
  * Description: Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more.
  * Version:           1.0.0
  * Requires at least: 5.9

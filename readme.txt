@@ -1,4 +1,4 @@
-=== Stock Availability Alert ===
+=== Stock Availability Alert for WooCommerce ===
 
 Contributors: thebitcraft
 Tags: stock alert, email, notification, stock availability, product stock
