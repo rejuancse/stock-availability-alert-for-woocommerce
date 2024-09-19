@@ -3,7 +3,7 @@
         'name' => 'rejuan/enhanced-stock-availability-alert',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9470f6e5733cf1ca2f08618f51b565558b5aa0be',
+        'reference' => '88f26473d9d204603444ec817634edf27b1262df',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'rejuan/enhanced-stock-availability-alert' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9470f6e5733cf1ca2f08618f51b565558b5aa0be',
+            'reference' => '88f26473d9d204603444ec817634edf27b1262df',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

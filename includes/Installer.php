@@ -30,13 +30,13 @@ class Installer {
      * @return  void
      */
     public function add_version() {
-        $installed = get_option('stock_alert_installed');
+        $installed = get_option( 'stock_alert_installed' );
 
-        if (!$installed) {
-            update_option('stock_alert_installed', time());
+        if ( ! $installed ) {
+            update_option( 'stock_alert_installed', time() );
         }
 
-        update_option('stock_alert_version', STOCK_ALERT_VERSION);
+        update_option( 'stock_alert_version', STOCK_ALERT_VERSION );
     }
 
     /**
@@ -66,4 +66,4 @@ class Installer {
 }
 
 // Register the activation hook in the main plugin file
-register_activation_hook(__FILE__, array('StockAlert\Installer', 'run'));
+register_activation_hook( __FILE__, array( 'StockAlert\Installer', 'run' ) );
