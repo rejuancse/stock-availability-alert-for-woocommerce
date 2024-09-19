@@ -10,11 +10,16 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
     "autoload": {
         "psr-4": {
           "StockAlert\\": "includes/"
         },
         "files": []
+    },
+    "require-dev": {
+    },
+    "config": {
+        "allow-plugins": {
+        }
     }
 }

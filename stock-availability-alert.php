@@ -6,6 +6,7 @@
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            TheBitCraft
+ * Author URI:        https://thebitcraft.com
  * Text Domain:       stock-alert
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -32,18 +33,18 @@ final class Stock_Availability_Alert {
      */
     private function __construct() {
         $this->define_constants();
-        add_action( 'init', [ $this, 'stock_alert_language_load' ] );
-        register_activation_hook( __FILE__, [ $this, 'activate' ] );
-        add_action( 'plugins_loaded', [ $this, 'init_plugin' ] );
-        add_action('wp_enqueue_scripts', [ $this, 'frontend_script' ]);
-        add_action('admin_enqueue_scripts', [ $this, 'admin_script' ]);
+        add_action( 'init', array( $this, 'stock_alert_language_load' ) );
+        register_activation_hook( __FILE__, array( $this, 'activate' ) );
+        add_action( 'plugins_loaded', array( $this, 'init_plugin' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'frontend_script' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_script' ) );
     }
 
     /**
     * Load Text Domain Language
     */
     function stock_alert_language_load(){
-        load_plugin_textdomain( 'stock-alert', false, basename(dirname( __FILE__ )).'/languages/');
+        load_plugin_textdomain( 'stock-alert', false, basename( dirname( __FILE__ ) ).'/languages/' );
     }
 
     /**
@@ -89,11 +90,8 @@ final class Stock_Availability_Alert {
      * @return void
      */
     public function init_plugin() {
-        if ( is_admin() ) {
-            new StockAlert\Admin();
-        } else {
-            new StockAlert\Frontend();
-        }
+        new StockAlert\Admin();
+        new StockAlert\Frontend();
     }
 
     /**
@@ -104,8 +102,8 @@ final class Stock_Availability_Alert {
         wp_enqueue_style( 'stock-front', STOCK_ALERT_URL .'/assets/dist/css/notify-style.css', false, STOCK_ALERT_VERSION );
 
         #JS
-        wp_enqueue_script('stock-alert-notify-script', STOCK_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_ALERT_VERSION, true);
-        wp_localize_script('stock-alert-notify-script', 'notify_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script( 'stock-alert-notify-script', STOCK_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_ALERT_VERSION, true );
+        wp_localize_script( 'stock-alert-notify-script', 'notify_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
     }
 
     /**
