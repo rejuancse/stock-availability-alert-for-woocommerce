@@ -25,7 +25,7 @@ class Stock_Notifications_Menu {
     /**
      * Constructor for initializing hooks and actions for the plugin.
      *
-     * This method registers various WordPress and WooCommerce actions that 
+     * This method registers various WordPress and WooCommerce actions that
      * connect plugin functionality to WordPress events and AJAX requests.
      */
     public function __construct() {
@@ -47,8 +47,8 @@ class Stock_Notifications_Menu {
      */
     public function add_admin_menu() {
         add_menu_page(
-            __('Stock Notifications', 'stock-alert'),
-            __('Stock Notifications', 'stock-alert'),
+            __('Stock Notifications', 'stock-availability-alert-for-woocommerce'),
+            __('Stock Notifications', 'stock-availability-alert-for-woocommerce'),
             'manage_options',
             'stock-notifications',
             array($this, 'admin_page'),
@@ -56,8 +56,8 @@ class Stock_Notifications_Menu {
         );
         add_submenu_page(
             'stock-notifications',
-            __('Notification Settings', 'stock-alert'),
-            __('Settings', 'stock-alert'),
+            __('Notification Settings', 'stock-availability-alert-for-woocommerce'),
+            __('Settings', 'stock-availability-alert-for-woocommerce'),
             'manage_options',
             'stock-notifications-settings',
             array($this, 'settings_page')
@@ -74,25 +74,25 @@ class Stock_Notifications_Menu {
      */
     public function admin_page() {
         global $wpdb;
-    
+
         // Handle CSV export if the export button was clicked.
         if (isset($_POST['export_csv'])) {
             $this->generate_csv(); // Call the method to generate and download the CSV.
         }
-    
+
         // Table name for stock notifications in the database.
         $table_name = $wpdb->prefix . 'stock_notifications';
-    
+
         // Number of notifications to show per page.
         $items_per_page = 10;
-    
+
         // Get the current page number, ensuring it's valid.
         $paged = isset($_GET['paged']) && is_numeric($_GET['paged']) ? intval($_GET['paged']) : 1;
         $offset = ($paged - 1) * $items_per_page;
-    
+
         // Fetch the total number of stock notifications to calculate pagination.
         $total_notifications = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
-    
+
         // Fetch the notifications for the current page, using SQL LIMIT and OFFSET.
         // Ensure that $items_per_page and $offset are passed safely using $wpdb->prepare.
         $notifications = $wpdb->get_results($wpdb->prepare(
@@ -100,7 +100,7 @@ class Stock_Notifications_Menu {
             $items_per_page,
             $offset
         ));
-    
+
         // Path to the admin page template file.
         $template_path = STOCK_ALERT_PATH . 'templates/admin-page.php';
 
@@ -111,7 +111,7 @@ class Stock_Notifications_Menu {
             // Template not found, display an error or a fallback message.
             echo '<div class="notice notice-error"><p>Template file not found.</p></div>';
         }
-    }    
+    }
 
     /**
      * Generates a CSV file of stock notifications and initiates a download.
@@ -124,31 +124,31 @@ class Stock_Notifications_Menu {
     private function generate_csv() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
-    
+
         // Select relevant columns to match the CSV headers.
         $notifications = $wpdb->get_results("SELECT id, email, product_id, date_added FROM $table_name", ARRAY_A);
-    
+
         // Set headers for the CSV file.
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="stock_notifications.csv"');
-    
+
         // Open output stream.
         $output = fopen('php://output', 'w');
-    
+
         // Write the CSV column headers.
         fputcsv($output, array('ID', 'Email', 'Product ID', 'Date Added'));
-    
+
         // Write each row of notification data to the CSV.
         foreach ($notifications as $notification) {
             fputcsv($output, $notification);
         }
-    
+
         // Close the file output stream.
         fclose($output);
-    
+
         // Stop further script execution after file download.
         exit;
-    }    
+    }
 
     /**
      * Displays and handles the settings page for stock notifications.
@@ -166,7 +166,7 @@ class Stock_Notifications_Menu {
             update_option('stock_notification_email_templates', wp_kses_post($_POST['email_templates']));
 
             // Display success message
-            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-alert') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-availability-alert-for-woocommerce') . '</p></div>';
         }
 
         // Retrieve current saved options; use defaults if not set
@@ -181,9 +181,9 @@ class Stock_Notifications_Menu {
             include($template_path);
         } else {
             // Display an error message if the template file does not exist
-            echo '<div class="error"><p>' . esc_html__('Settings page template not found.', 'stock-alert') . '</p></div>';
+            echo '<div class="error"><p>' . esc_html__('Settings page template not found.', 'stock-availability-alert-for-woocommerce') . '</p></div>';
         }
-    }   
+    }
 
     /**
      * Returns the default email templates for stock notifications.
@@ -257,7 +257,7 @@ class Stock_Notifications_Menu {
 
         // Check rate limiting to prevent multiple requests
         if ($this->is_rate_limited($email)) {
-            wp_send_json_error(__('Too many requests. Please try again later.', 'stock-alert'));
+            wp_send_json_error(__('Too many requests. Please try again later.', 'stock-availability-alert-for-woocommerce'));
         }
 
         // Check for existing notification
@@ -281,12 +281,12 @@ class Stock_Notifications_Menu {
         $email = sanitize_email($email);
 
         if (!is_email($email)) {
-            wp_send_json_error(__('Invalid email address', 'stock-alert'));
+            wp_send_json_error(__('Invalid email address', 'stock-availability-alert-for-woocommerce'));
         }
 
         return $email;
     }
-    
+
     /**
      * Sanitizes and validates the product ID.
      *
@@ -298,12 +298,12 @@ class Stock_Notifications_Menu {
         $product_id = intval($product_id);
 
         if ($product_id <= 0) {
-            wp_send_json_error(__('Invalid product ID', 'stock-alert'));
+            wp_send_json_error(__('Invalid product ID', 'stock-availability-alert-for-woocommerce'));
         }
 
         return $product_id;
     }
-    
+
     /**
      * Retrieves an existing notification based on email and product ID.
      *
@@ -314,7 +314,7 @@ class Stock_Notifications_Menu {
     private function get_existing_notification(string $email, int $product_id): ?object {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
-        
+
         return $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT * FROM $table_name WHERE email = %s AND product_id = %d",
@@ -335,17 +335,17 @@ class Stock_Notifications_Menu {
 
         // If the existing notification is within the last 24 hours
         if ($time_difference < 24 * 60 * 60) {
-            wp_send_json_error(__('You have already subscribed to notifications for this product.', 'stock-alert'));
+            wp_send_json_error(__('You have already subscribed to notifications for this product.', 'stock-availability-alert-for-woocommerce'));
         }
 
         // Renew the subscription
         $this->renew_notification($existing_notification->id);
         wp_send_json_success(array(
-            'message' => __("Your notification subscription has been renewed for this product.", 'stock-alert'),
+            'message' => __("Your notification subscription has been renewed for this product.", 'stock-availability-alert-for-woocommerce'),
             'alternatives' => $this->get_alternative_products($product_id)
         ));
     }
-    
+
     /**
      * Renews the notification by updating the date_added field.
      *
@@ -364,7 +364,7 @@ class Stock_Notifications_Menu {
             array('%d')
         );
     }
-    
+
     /**
      * Creates a new stock notification and sends a confirmation message.
      *
@@ -404,12 +404,12 @@ class Stock_Notifications_Menu {
         $product = wc_get_product($product_id);
 
         // Determine the product name, defaulting to 'this product' if not found
-        $product_name = $product ? $product->get_name() : __('this product', 'stock-alert');
+        $product_name = $product ? $product->get_name() : __('this product', 'stock-availability-alert-for-woocommerce');
 
         // Prepare the response data
         $response_data = array(
             'message' => sprintf(
-                __("Thank you for subscribing! We'll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!", 'stock-alert'),
+                __("Thank you for subscribing! We'll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!", 'stock-availability-alert-for-woocommerce'),
                 esc_html($product_name) // Escape the product name for safe output
             ),
             'alternatives' => $this->get_alternative_products($product_id) // Fetch and include alternative products
@@ -425,10 +425,10 @@ class Stock_Notifications_Menu {
         if (!$product) {
             return array(); // Return an empty array if product is not found
         }
-    
+
         $category_ids = $product->get_category_ids();
         $tag_ids = wp_get_post_terms($product_id, 'product_tag', array('fields' => 'ids'));
-    
+
         // Prepare query arguments to fetch alternative products
         $args = array(
             'category' => $category_ids,
@@ -443,13 +443,13 @@ class Stock_Notifications_Menu {
                 )
             )
         );
-    
+
         // Fetch products based on category, tag, and stock status
         $alternative_products = wc_get_products($args);
-    
+
         // Initialize an array to hold the alternative product details
         $alternatives = array();
-    
+
         // Loop through the fetched products and extract relevant details
         foreach ($alternative_products as $alt_product) {
             $alternatives[] = array(
@@ -460,7 +460,7 @@ class Stock_Notifications_Menu {
                 'image' => wp_get_attachment_url($alt_product->get_image_id())
             );
         }
-    
+
         return $alternatives;
     }
 
@@ -474,29 +474,29 @@ class Stock_Notifications_Menu {
     public function send_stock_notifications($product_id) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
-    
+
         // Fetch notifications for the given product ID
         $notifications = $wpdb->get_results($wpdb->prepare(
             "SELECT * FROM $table_name WHERE product_id = %d",
             $product_id
         ));
-    
+
         // Get email templates and product details
         $email_templates = get_option('stock_notification_email_templates', $this->get_default_email_templates());
         $product = wc_get_product($product_id);
-    
+
         if (!$product) {
             return; // Exit if the product is not found
         }
-    
+
         // Prepare email headers
         $headers = array('Content-Type: text/html; charset=UTF-8');
-    
+
         // Loop through each notification and send emails
         foreach ($notifications as $notification) {
             $to = sanitize_email($notification->email);
-            $subject = sprintf(__('Product Back in Stock: %s', 'stock-alert'), esc_html($product->get_name()));
-    
+            $subject = sprintf(__('Product Back in Stock: %s', 'stock-availability-alert-for-woocommerce'), esc_html($product->get_name()));
+
             // Replace placeholders in the email template with actual values
             $message = str_replace(
                 array('{product_name}', '{product_url}', '{site_name}'),
@@ -507,14 +507,14 @@ class Stock_Notifications_Menu {
                 ),
                 wp_kses_post($email_templates)
             );
-    
+
             // Send the email
             wp_mail($to, $subject, $message, $headers);
-    
+
             // Delete the notification after sending the email
             $wpdb->delete($table_name, array('id' => $notification->id));
         }
-    }    
+    }
 
     /**
      * Checks stock levels and notifies users if necessary.
@@ -526,20 +526,20 @@ class Stock_Notifications_Menu {
         if (!$product instanceof WC_Product) {
             return; // Exit if the product is not a valid WC_Product instance
         }
-    
+
         $product_id = $product->get_id();
         $stock_quantity = $product->get_stock_quantity();
         $notification_threshold = get_option('stock_notification_threshold', 1);
-    
+
         // Ensure stock quantity and notification threshold are integers
         $stock_quantity = intval($stock_quantity);
         $notification_threshold = intval($notification_threshold);
-    
+
         // Check if the stock quantity is above the threshold
         if ($stock_quantity >= $notification_threshold) {
             $this->send_stock_notifications($product_id);
         }
-    }    
+    }
 
     /**
      * Checks if the email address has exceeded the allowed number of notifications
@@ -581,7 +581,7 @@ class Stock_Notifications_Menu {
 
     /**
      * Handles bulk actions for stock notifications in the WordPress admin.
-     * 
+     *
      * This method processes bulk actions (e.g., deleting selected notifications)
      * submitted via the admin interface. It verifies nonce for security and
      * performs the requested action on selected notifications.
@@ -590,7 +590,7 @@ class Stock_Notifications_Menu {
      */
     public function handle_bulk_action_stock_notifications() {
         // Check for nonce verification and required POST data
-        if (!isset($_POST['submit_bulk_action'], $_POST['bulk_action_nonce']) || 
+        if (!isset($_POST['submit_bulk_action'], $_POST['bulk_action_nonce']) ||
             !wp_verify_nonce($_POST['bulk_action_nonce'], 'bulk_action')) {
             return; // Exit if nonce verification fails or POST data is missing
         }
@@ -609,7 +609,7 @@ class Stock_Notifications_Menu {
 
     /**
      * Handles the deletion of multiple stock notifications.
-     * 
+     *
      * Iterates through the provided notification IDs and deletes each one
      * from the database. Displays a success message in the admin area upon completion.
      *
@@ -628,14 +628,14 @@ class Stock_Notifications_Menu {
         // Add admin notice to indicate successful deletion
         add_action('admin_notices', function() {
             echo '<div class="notice notice-success is-dismissible">';
-            echo '<p>' . esc_html__('Selected notifications have been deleted.', 'stock-alert') . '</p>';
+            echo '<p>' . esc_html__('Selected notifications have been deleted.', 'stock-availability-alert-for-woocommerce') . '</p>';
             echo '</div>';
         });
     }
 
     /**
      * Deletes a stock notification from the database.
-     * 
+     *
      * This method removes a specific stock notification entry based on the provided
      * notification ID. It uses the WordPress $wpdb object to perform a safe delete operation.
      *
@@ -653,5 +653,4 @@ class Stock_Notifications_Menu {
             array('%d') // Format for the value, %d for integer
         );
     }
-
 }

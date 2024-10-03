@@ -36,7 +36,7 @@ class Initial_Setup {
      * @return void
      */
     protected function output_wc_requirement_message() {
-        $text = esc_html__( 'WooCommerce', 'stock-alert' );
+        $text = esc_html__( 'WooCommerce', 'stock-availability-alert-for-woocommerce' );
 
         // Construct the link to install WooCommerce
         $link = esc_url ( add_query_arg(array(
@@ -50,10 +50,10 @@ class Initial_Setup {
         // Construct the message with bold text
         $message = sprintf(
             '<strong>%1$s</strong><br>%2$s %3$s %4$s',
-            esc_html__( 'Thanks for installing Enhanced Stock Availability Alert, you rock! 🤘', 'stock-alert' ),
-            esc_html__( 'To enable eCommerce features, you need to install the', 'stock-alert'),
-            '<a class="thickbox open-plugin-details-modal" href="' . $link . '"><strong>' . esc_html__( 'WooCommerce', 'stock-alert' ) . '</strong></a>',
-            esc_html__( 'plugin.', 'stock-alert' )
+            esc_html__( 'Thanks for installing Enhanced Stock Availability Alert, you rock! 🤘', 'stock-availability-alert-for-woocommerce' ),
+            esc_html__( 'To enable eCommerce features, you need to install the', 'stock-availability-alert-for-woocommerce'),
+            '<a class="thickbox open-plugin-details-modal" href="' . $link . '"><strong>' . esc_html__( 'WooCommerce', 'stock-availability-alert-for-woocommerce' ) . '</strong></a>',
+            esc_html__( 'plugin.', 'stock-availability-alert-for-woocommerce' )
         );
 
         // Output the message in an error notice
