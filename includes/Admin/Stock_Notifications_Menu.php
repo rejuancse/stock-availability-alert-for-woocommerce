@@ -47,20 +47,21 @@ class Stock_Notifications_Menu {
      */
     public function add_admin_menu() {
         add_menu_page(
-            __('Stock Notifications', 'stock-availability-alert-for-woocommerce'),
-            __('Stock Notifications', 'stock-availability-alert-for-woocommerce'),
+            __( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ),
+            __( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ),
             'manage_options',
             'stock-notifications',
-            array($this, 'admin_page'),
+            array( $this, 'admin_page' ),
             'dashicons-email-alt'
         );
+
         add_submenu_page(
             'stock-notifications',
-            __('Notification Settings', 'stock-availability-alert-for-woocommerce'),
-            __('Settings', 'stock-availability-alert-for-woocommerce'),
+            __( 'Notification Settings', 'stock-availability-alert-for-woocommerce' ),
+            __( 'Settings', 'stock-availability-alert-for-woocommerce' ),
             'manage_options',
             'stock-notifications-settings',
-            array($this, 'settings_page')
+            array( $this, 'settings_page' )
         );
     }
 
@@ -126,25 +127,25 @@ class Stock_Notifications_Menu {
         $table_name = $wpdb->prefix . 'stock_notifications';
 
         // Select relevant columns to match the CSV headers.
-        $notifications = $wpdb->get_results("SELECT id, email, product_id, date_added FROM $table_name", ARRAY_A);
+        $notifications = $wpdb->get_results( "SELECT id, email, product_id, date_added FROM {$table_name}", ARRAY_A );
 
         // Set headers for the CSV file.
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="stock_notifications.csv"');
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment; filename="stock_notifications.csv"' );
 
         // Open output stream.
-        $output = fopen('php://output', 'w');
+        $output = fopen( 'php://output', 'w' );
 
         // Write the CSV column headers.
-        fputcsv($output, array('ID', 'Email', 'Product ID', 'Date Added'));
+        fputcsv( $output, array( 'ID', 'Email', 'Product ID', 'Date Added' ) );
 
         // Write each row of notification data to the CSV.
-        foreach ($notifications as $notification) {
-            fputcsv($output, $notification);
+        foreach ( $notifications as $notification ) {
+            fputcsv( $output, $notification );
         }
 
-        // Close the file output stream.
-        fclose($output);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+        fclose( $output );
 
         // Stop further script execution after file download.
         exit;
@@ -191,8 +192,10 @@ class Stock_Notifications_Menu {
      * @return string Default email templates.
      */
     private function get_default_email_templates() {
-        return __(
-            '<table class="body" style="border-collapse: collapse; border-spacing: 0; vertical-align: top; height: 100% !important; width: 100% !important; min-width: 100%; background-color: #f5f9fc; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; padding: 0; margin: 0; text-align: left; font-size: 14px; line-height: 140%;" border="0" width="100%" cellspacing="0" cellpadding="0">
+        $template = '';
+
+        // Header section
+        $template .= '<table class="body" style="border-collapse: collapse; border-spacing: 0; vertical-align: top; height: 100% !important; width: 100% !important; min-width: 100%; background-color: #f5f9fc; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; padding: 0; margin: 0; text-align: left; font-size: 14px; line-height: 140%;" border="0" width="100%" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr style="padding: 0; vertical-align: top; text-align: left;">
                     <td class="body-inner wp-mail-smtp" style="border-collapse: collapse !important; vertical-align: top; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; padding: 0; margin: 0; font-size: 14px; line-height: 140%; text-align: center;" align="center" valign="top">
@@ -201,7 +204,7 @@ class Stock_Notifications_Menu {
                                 <tr>
                                     <td style="padding: 0;">
                                         <div style="background-color: #34495e; color: #f1c40f; padding: 20px; text-align: center;">
-                                            <h1 style="margin: 0; font-size: 20px; font-weight: 600;">Product Back in Stock</h1>
+                                            <h1 style="margin: 0; font-size: 20px; font-weight: 600;">' . esc_html__('Product Back in Stock', 'your-text-domain') . '</h1>
                                         </div>
                                     </td>
                                 </tr>
@@ -212,13 +215,12 @@ class Stock_Notifications_Menu {
                                 <tr style="padding: 0; vertical-align: top; text-align: left;">
                                     <td class="content" style="border-collapse: collapse !important; vertical-align: top; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; margin: 0; text-align: left; font-size: 14px; line-height: 140%; padding: 60px 75px 45px 75px; position: relative; flex-direction: column; min-width: 0; background-color: #fff; border: 1px solid #eceef3;" align="left" valign="top">
                                         <div class="success">
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">Hello,</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>. </p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">You can purchase it here: <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">Buy Now</a>
-                                            </p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">Thank you for your patience and interest in our products.</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">Best Regards,</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">The {site_name} Team</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Hello,', 'your-text-domain') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'your-text-domain') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('You can purchase it here:', 'your-text-domain') . ' <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">' . esc_html__('Buy Now', 'your-text-domain') . '</a></p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Thank you for your patience and interest in our products.', 'your-text-domain') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Best Regards,', 'your-text-domain') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('The {site_name} Team', 'your-text-domain') . '</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -229,7 +231,7 @@ class Stock_Notifications_Menu {
                                 <tr>
                                     <td style="padding: 0;">
                                         <div style="background-color: #34495e; color: #ffffff; padding: 12px 20px; text-align: center;">
-                                            <span style="margin: 0; font-size: 14px; font-weight: 400;">© 2024 {site_name} | All rights reserved.</span>
+                                            <span style="margin: 0; font-size: 14px; font-weight: 400;">© 2024 {site_name} | ' . esc_html__('All rights reserved.', 'your-text-domain') . '</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -238,8 +240,9 @@ class Stock_Notifications_Menu {
                     </td>
                 </tr>
             </tbody>
-        </table>'
-        );
+        </table>';
+
+        return $template;
     }
 
     /**
@@ -252,21 +255,21 @@ class Stock_Notifications_Menu {
      */
     public function handle_stock_notification() {
         // Sanitize and validate inputs
-        $email = $this->sanitize_and_validate_email($_POST['email']);
-        $product_id = $this->sanitize_and_validate_product_id($_POST['product_id']);
+        $email = $this->sanitize_and_validate_email( sanitize_email( wp_unslash( $_POST['email'] ) ) );
+        $product_id = $this->sanitize_and_validate_product_id( absint( wp_unslash( $_POST['product_id'] ) ) );
 
         // Check rate limiting to prevent multiple requests
         if ($this->is_rate_limited($email)) {
-            wp_send_json_error(__('Too many requests. Please try again later.', 'stock-availability-alert-for-woocommerce'));
+            wp_send_json_error( __( 'Too many requests. Please try again later.', 'stock-availability-alert-for-woocommerce' ) );
         }
 
         // Check for existing notification
-        $existing_notification = $this->get_existing_notification($email, $product_id);
+        $existing_notification = $this->get_existing_notification( $email, $product_id );
 
-        if ($existing_notification) {
-            $this->handle_existing_notification($existing_notification, $product_id);
+        if ( $existing_notification ) {
+            $this->handle_existing_notification( $existing_notification, $product_id );
         } else {
-            $this->create_new_notification($email, $product_id);
+            $this->create_new_notification( $email, $product_id );
         }
     }
 
@@ -277,11 +280,11 @@ class Stock_Notifications_Menu {
      * @return string The sanitized and validated email address.
      * @throws WP_Error If the email address is invalid.
      */
-    private function sanitize_and_validate_email($email): string {
-        $email = sanitize_email($email);
+    private function sanitize_and_validate_email( $email ): string {
+        $email = sanitize_email( $email );
 
         if (!is_email($email)) {
-            wp_send_json_error(__('Invalid email address', 'stock-availability-alert-for-woocommerce'));
+            wp_send_json_error( __( 'Invalid email address', 'stock-availability-alert-for-woocommerce' ) );
         }
 
         return $email;
@@ -295,10 +298,10 @@ class Stock_Notifications_Menu {
      * @throws WP_Error If the product ID is invalid.
      */
     private function sanitize_and_validate_product_id($product_id): int {
-        $product_id = intval($product_id);
+        $product_id = intval( $product_id );
 
         if ($product_id <= 0) {
-            wp_send_json_error(__('Invalid product ID', 'stock-availability-alert-for-woocommerce'));
+            wp_send_json_error( __( 'Invalid product ID', 'stock-availability-alert-for-woocommerce' ) );
         }
 
         return $product_id;
@@ -379,15 +382,15 @@ class Stock_Notifications_Menu {
         $wpdb->insert(
             $table_name,
             array(
-                'email' => sanitize_email($email),
-                'product_id' => intval($product_id),
-                'date_added' => current_time('mysql')
+                'email'         => sanitize_email($email),
+                'product_id'    => intval($product_id),
+                'date_added'    => current_time('mysql')
             ),
-            array('%s', '%d', '%s')
+            array( '%s', '%d', '%s' )
         );
 
         // Send confirmation to user
-        $this->send_subscription_confirmation($product_id);
+        $this->send_subscription_confirmation( $product_id );
     }
 
     /**
@@ -399,53 +402,53 @@ class Stock_Notifications_Menu {
      * @param int $product_id The ID of the product for which the subscription is made.
      * @return void
      */
-    private function send_subscription_confirmation(int $product_id) {
+    private function send_subscription_confirmation( int $product_id ) {
         // Retrieve the product object from the product ID
         $product = wc_get_product($product_id);
 
         // Determine the product name, defaulting to 'this product' if not found
         $product_name = $product ? $product->get_name() : __('this product', 'stock-availability-alert-for-woocommerce');
 
-        // Prepare the response data
         $response_data = array(
-            'message' => sprintf(
-                __("Thank you for subscribing! We'll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!", 'stock-availability-alert-for-woocommerce'),
-                esc_html($product_name) // Escape the product name for safe output
+            'message'      => sprintf(
+                /* translators: %s: product name */
+                __( 'Thank you for subscribing! We\'ll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!', 'stock-availability-alert-for-woocommerce' ),
+                esc_html( $product_name )
             ),
-            'alternatives' => $this->get_alternative_products($product_id) // Fetch and include alternative products
+            'alternatives' => $this->get_alternative_products( $product_id ),
         );
 
-        // Send a JSON success response with the prepared data
-        wp_send_json_success($response_data);
+        // Translators: %d is the number of alternative products.
+        wp_send_json_success( $response_data );
     }
 
-    private function get_alternative_products($product_id) {
+    private function get_alternative_products( $product_id ) {
         // Get the product and its categories and tags
-        $product = wc_get_product($product_id);
-        if (!$product) {
+        $product = wc_get_product( $product_id );
+        if ( !$product ) {
             return array(); // Return an empty array if product is not found
         }
 
         $category_ids = $product->get_category_ids();
-        $tag_ids = wp_get_post_terms($product_id, 'product_tag', array('fields' => 'ids'));
+        $tag_ids = wp_get_post_terms( $product_id, 'product_tag', array( 'fields' => 'ids' ) );
 
         // Prepare query arguments to fetch alternative products
         $args = array(
-            'category' => $category_ids,
-            'tag' => $tag_ids,
-            'posts_per_page' => 5, // Limit to 5 alternative products
-            'post__not_in' => array($product_id), // Exclude the current product
-            'post_status' => 'publish',
-            'meta_query' => array(
+            'category'          => $category_ids,
+            'tag'               => $tag_ids,
+            'posts_per_page'    => 5, // Limit to 5 alternative products
+            'post__not_in'      => array($product_id), // Exclude the current product
+            'post_status'       => 'publish',
+            'meta_query'        => array(
                 array(
-                    'key' => '_stock_status',
-                    'value' => 'instock' // Only get products that are in stock
+                    'key'       => '_stock_status',
+                    'value'     => 'instock' // Only get products that are in stock
                 )
             )
         );
 
         // Fetch products based on category, tag, and stock status
-        $alternative_products = wc_get_products($args);
+        $alternative_products = wc_get_products( $args );
 
         // Initialize an array to hold the alternative product details
         $alternatives = array();
@@ -453,11 +456,11 @@ class Stock_Notifications_Menu {
         // Loop through the fetched products and extract relevant details
         foreach ($alternative_products as $alt_product) {
             $alternatives[] = array(
-                'id' => $alt_product->get_id(),
-                'name' => $alt_product->get_name(),
-                'url' => get_permalink($alt_product->get_id()),
-                'price' => $alt_product->get_price(),
-                'image' => wp_get_attachment_url($alt_product->get_image_id())
+                'id'        => $alt_product->get_id(),
+                'name'      => $alt_product->get_name(),
+                'url'       => get_permalink($alt_product->get_id()),
+                'price'     => $alt_product->get_price(),
+                'image'     => wp_get_attachment_url($alt_product->get_image_id())
             );
         }
 
@@ -471,7 +474,7 @@ class Stock_Notifications_Menu {
      * @param string $stock_status New stock status.
      * @param int $old_stock_status Old stock status.
      */
-    public function send_stock_notifications($product_id) {
+    public function send_stock_notifications( $product_id ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
 
@@ -494,25 +497,29 @@ class Stock_Notifications_Menu {
 
         // Loop through each notification and send emails
         foreach ($notifications as $notification) {
-            $to = sanitize_email($notification->email);
-            $subject = sprintf(__('Product Back in Stock: %s', 'stock-availability-alert-for-woocommerce'), esc_html($product->get_name()));
+            $to = sanitize_email( $notification->email );
+            $subject = sprintf(
+                /* translators: %s: product name */
+                __( 'Product Back in Stock: %s', 'stock-availability-alert-for-woocommerce' ),
+                esc_html( $product->get_name() )
+            );
 
             // Replace placeholders in the email template with actual values
             $message = str_replace(
-                array('{product_name}', '{product_url}', '{site_name}'),
+                array( '{product_name}', '{product_url}', '{site_name}' ),
                 array(
-                    esc_html($product->get_name()),
-                    esc_url(get_permalink($product_id)),
-                    esc_html(get_bloginfo('name'))
+                    esc_html( $product->get_name() ),
+                    esc_url( get_permalink( $product_id ) ),
+                    esc_html( get_bloginfo( 'name' ) ),
                 ),
-                wp_kses_post($email_templates)
+                wp_kses_post( $email_templates )
             );
 
             // Send the email
-            wp_mail($to, $subject, $message, $headers);
+            wp_mail( $to, $subject, $message, $headers );
 
             // Delete the notification after sending the email
-            $wpdb->delete($table_name, array('id' => $notification->id));
+            $wpdb->delete( $table_name, array( 'id' => $notification->id ) );
         }
     }
 
@@ -536,8 +543,8 @@ class Stock_Notifications_Menu {
         $notification_threshold = intval($notification_threshold);
 
         // Check if the stock quantity is above the threshold
-        if ($stock_quantity >= $notification_threshold) {
-            $this->send_stock_notifications($product_id);
+        if ( $stock_quantity >= $notification_threshold ) {
+            $this->send_stock_notifications( $product_id );
         }
     }
 
@@ -552,30 +559,30 @@ class Stock_Notifications_Menu {
      * @param string $email The email address to check for rate-limiting.
      * @return bool Returns true if the email address is rate-limited, otherwise false.
      */
-    private function is_rate_limited($email) {
+    private function is_rate_limited( $email ) {
         // Validate email format
-        if (!is_email($email)) {
+        if (!is_email( $email )) {
             return true; // Treat invalid email addresses as rate-limited
         }
 
         // Generate a unique transient name based on the email address
-        $transient_name = 'stock_notify_' . md5($email);
+        $transient_name = 'stock_notify_' . md5( $email );
         // Retrieve the current count of requests from the transient
-        $count = get_transient($transient_name);
+        $count = get_transient( $transient_name );
 
         // If no transient is found, initialize it with a count of 1
-        if ($count === false) {
-            set_transient($transient_name, 1, HOUR_IN_SECONDS);
+        if ( $count === false ) {
+            set_transient( $transient_name, 1, HOUR_IN_SECONDS );
             return false;
         }
 
         // Check if the count exceeds the rate limit (5 requests per hour)
-        if ($count >= 5) {
+        if ( $count >= 5 ) {
             return true; // Email is rate-limited
         }
 
         // Increment the count and reset the expiration time of the transient
-        set_transient($transient_name, $count + 1, HOUR_IN_SECONDS);
+        set_transient( $transient_name, $count + 1, HOUR_IN_SECONDS );
         return false;
     }
 
@@ -590,19 +597,18 @@ class Stock_Notifications_Menu {
      */
     public function handle_bulk_action_stock_notifications() {
         // Check for nonce verification and required POST data
-        if (!isset($_POST['submit_bulk_action'], $_POST['bulk_action_nonce']) ||
-            !wp_verify_nonce($_POST['bulk_action_nonce'], 'bulk_action')) {
+        if ( !isset( $_POST['submit_bulk_action'], $_POST['bulk_action_nonce'] ) ||
+        ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bulk_action_nonce'] ) ), 'bulk_action' ) ) {
             return; // Exit if nonce verification fails or POST data is missing
         }
 
         // Check if notifications are selected and ensure it's an array
-        if (isset($_POST['notifications']) && is_array($_POST['notifications'])) {
-            // Sanitize and retrieve the selected bulk action
-            $action = sanitize_text_field($_POST['bulk_action']);
+        if ( isset( $_POST['notifications'] ) && is_array( $_POST['notifications'] ) ) {
+            $action = isset( $_POST['bulk_action'] ) ? sanitize_text_field( wp_unslash( $_POST['bulk_action'] ) ) : '';
 
-            // Perform action based on the selected bulk action
-            if ($action === 'delete') {
-                $this->handle_bulk_delete($_POST['notifications']);
+            if ( 'delete' === $action ) {
+                $notifications = array_map( 'absint', wp_unslash( $_POST['notifications'] ) );
+                $this->handle_bulk_delete( $notifications );
             }
         }
     }
@@ -616,13 +622,13 @@ class Stock_Notifications_Menu {
      * @param array $notification_ids Array of notification IDs to delete.
      * @return void
      */
-    private function handle_bulk_delete(array $notification_ids) {
+    private function handle_bulk_delete( array $notification_ids ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'stock_notifications';
 
         // Delete each notification by ID
-        foreach ($notification_ids as $notification_id) {
-            $this->delete_stock_notification(intval($notification_id));
+        foreach ( $notification_ids as $notification_id ) {
+            $this->delete_stock_notification( intval( $notification_id ) );
         }
 
         // Add admin notice to indicate successful deletion
@@ -642,7 +648,7 @@ class Stock_Notifications_Menu {
      * @param int $notification_id The ID of the notification to delete.
      * @return void
      */
-    private function delete_stock_notification(int $notification_id) {
+    private function delete_stock_notification( int $notification_id ) {
         global $wpdb;
         $table = $wpdb->prefix . 'stock_notifications'; // Define the table name
 
