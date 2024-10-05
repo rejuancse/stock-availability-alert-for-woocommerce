@@ -75,29 +75,44 @@ class Admin {
     }
 
     /**
-     * Get the total number of stock notifications.
+     * Get the total number of notifications.
      *
-     * @return int The total count of notifications.
+     * @global wpdb $wpdb WordPress database abstraction object.
+     * @return int Total number of notifications.
      */
     protected function get_total_notifications() {
-        return (int) $this->wpdb->get_var("SELECT COUNT(*) FROM {$this->table_name}") ?: 0;
+        global $wpdb;
+        $table_name = $wpdb->prefix . $this->table_name;
+        return (int) $wpdb->get_var(
+            $wpdb->prepare( "SELECT COUNT(*) FROM `%s`", $table_name )
+        ) ?: 0;
     }
 
     /**
-     * Get the count of unique products with stock notifications.
+     * Get the count of unique products.
      *
-     * @return int The count of unique products.
+     * @global wpdb $wpdb WordPress database abstraction object.
+     * @return int Number of unique products.
      */
     protected function get_unique_products() {
-        return (int) $this->wpdb->get_var("SELECT COUNT(DISTINCT product_id) FROM {$this->table_name}") ?: 0;
+        global $wpdb;
+        $table_name = $wpdb->prefix . $this->table_name;
+        return (int) $wpdb->get_var(
+            $wpdb->prepare( "SELECT COUNT(DISTINCT product_id) FROM `%s`", $table_name )
+        ) ?: 0;
     }
 
     /**
-     * Get the count of unique email addresses subscribed to notifications.
+     * Get the count of unique email addresses.
      *
-     * @return int The count of unique email addresses.
+     * @global wpdb $wpdb WordPress database abstraction object.
+     * @return int Number of unique email addresses.
      */
     protected function get_unique_emails() {
-        return (int) $this->wpdb->get_var("SELECT COUNT(DISTINCT email) FROM {$this->table_name}") ?: 0;
+        global $wpdb;
+        $table_name = $wpdb->prefix . $this->table_name;
+        return (int) $wpdb->get_var(
+            $wpdb->prepare( "SELECT COUNT(DISTINCT email) FROM `%s`", $table_name )
+        ) ?: 0;
     }
 }

@@ -18,7 +18,18 @@
             </div>
 
             <div class="notification-count">
-                <span class="displaying-num"><?php echo ' ' . esc_html($total_notifications) . ' ' . __( 'items', 'stock-availability-alert-for-woocommerce' ); ?></span>
+                <span class="displaying-num">
+                    <?php
+                        // Ensure $total_notifications is a positive integer
+                        $total_notifications = absint( $total_notifications );
+
+                        // Translators: %d is the number of notifications
+                        echo esc_html( sprintf( _n( '%d item', '%d items', $total_notifications, 'stock-availability-alert-for-woocommerce' ),
+                            $total_notifications )
+                        );
+                    ?>
+                </span>
+
 
                 <div class="export_csv">
                     <?php wp_nonce_field( 'stock_notification_export', 'stock_notification_export_nonce' ); ?>
@@ -48,7 +59,7 @@
                                 <input type="checkbox" name="notifications[]" value="<?php echo esc_attr( $notification->id ); ?>" />
                             </th>
                             <td>
-                                <a href="<?php echo get_permalink( $product->get_id() ); ?>">
+                                <a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
                                     <?php
                                     $image_id = $product->get_image_id(); // Get image ID
                                     $image_url = wp_get_attachment_image_url( $image_id, 'thumbnail' ); // Get image URL
@@ -86,7 +97,7 @@
 
             if ( $pagination_args['total'] > 1 ) {
                 echo '<div class="pagination-container">';
-                    echo paginate_links( $pagination_args );
+                    echo wp_kses_post( paginate_links( $pagination_args ) );
                 echo '</div>';
             }
         ?>

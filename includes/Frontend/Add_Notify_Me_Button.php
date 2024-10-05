@@ -34,7 +34,7 @@ class Add_Notify_Me_Button {
                 echo '<button class="button" id="notify-me-button">' . esc_html__('Notify Me When Available', 'stock-availability-alert-for-woocommerce') . '</button>';
                 echo '<div id="notify-me-form" style="display: none;">
                         <div class="form-fields">
-                            <input type="email" id="notify-email" placeholder="' . __('Enter your email', 'stock-availability-alert-for-woocommerce') . '" required>
+                            <input type="email" id="notify-email" placeholder="' . esc_attr__( 'Enter your email', 'stock-availability-alert-for-woocommerce' ) . '" required>
                             <input type="hidden" id="notify-product-id" value="' . esc_attr( $product->get_id() ) . '">
                             <button id="submit-notify">' . esc_html__( 'Notify Me', 'stock-availability-alert-for-woocommerce' ) . '</button>
                         </div>
