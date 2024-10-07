@@ -10,6 +10,7 @@
  * Text Domain:       stock-availability-alert-for-woocommerce
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Requires Plugins: woocommerce
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -99,7 +100,7 @@ final class Stock_Availability_Alert {
      * @ Frontend
      */
     public function frontend_script(){
-        wp_enqueue_style( 'stock-front', STOCK_ALERT_URL .'/assets/dist/css/notify-style.css', false, STOCK_ALERT_VERSION );
+        wp_enqueue_style( 'stock-alert-front', STOCK_ALERT_URL .'/assets/dist/css/notify-style.css', false, STOCK_ALERT_VERSION );
 
         #JS
         wp_enqueue_script( 'stock-alert-notify-script', STOCK_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_ALERT_VERSION, true );
@@ -111,7 +112,7 @@ final class Stock_Availability_Alert {
      * @ Admin
      */
     public function admin_script(){
-        wp_enqueue_style( 'stock-admin', STOCK_ALERT_URL .'/assets/dist/css/stock-admin.css', false, STOCK_ALERT_VERSION );
+        wp_enqueue_style( 'stock-alert-admin', STOCK_ALERT_URL .'/assets/dist/css/stock-admin.css', false, STOCK_ALERT_VERSION );
     }
 }
 

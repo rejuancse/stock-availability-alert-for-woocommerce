@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'rejuan/enhanced-stock-availability-alert',
+        'name' => 'thebitcraft/stock-availability-alert-for-woocommerce',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '88f26473d9d204603444ec817634edf27b1262df',
+        'reference' => '11292daa9449448f8044839e42c2e44757791428',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'rejuan/enhanced-stock-availability-alert' => array(
+        'thebitcraft/stock-availability-alert-for-woocommerce' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '88f26473d9d204603444ec817634edf27b1262df',
+            'reference' => '11292daa9449448f8044839e42c2e44757791428',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

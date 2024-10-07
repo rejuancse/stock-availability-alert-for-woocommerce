@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Stock Availability Alert for WooCommerce 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/stock-availability-alert\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/stock-availability-alert-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,44 +15,27 @@ msgstr ""
 "X-Domain: stock-alert\n"
 
 #. Plugin Name of the plugin
-#: stock-availability-alert.php
+#: stock-availability-alert-for-woocommerce.php
 msgid "Stock Availability Alert for WooCommerce"
 msgstr ""
 
 #. Description of the plugin
-#: stock-availability-alert.php
+#: stock-availability-alert-for-woocommerce.php
 msgid "Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more."
 msgstr ""
 
 #. Author of the plugin
-#: stock-availability-alert.php
+#: stock-availability-alert-for-woocommerce.php
 msgid "TheBitCraft"
 msgstr ""
 
 #. Author URI of the plugin
-#: stock-availability-alert.php
+#: stock-availability-alert-for-woocommerce.php
 msgid "https://thebitcraft.com"
 msgstr ""
 
 #: includes/Admin.php:35
 msgid "Stock Notification Statistics"
-msgstr ""
-
-#: includes/Admin/Initial_Setup.php:39
-#: includes/Admin/Initial_Setup.php:55
-msgid "WooCommerce"
-msgstr ""
-
-#: includes/Admin/Initial_Setup.php:53
-msgid "Thanks for installing Enhanced Stock Availability Alert, you rock! 🤘"
-msgstr ""
-
-#: includes/Admin/Initial_Setup.php:54
-msgid "To enable eCommerce features, you need to install the"
-msgstr ""
-
-#: includes/Admin/Initial_Setup.php:56
-msgid "plugin."
 msgstr ""
 
 #: includes/Admin/Stock_Notifications_Menu.php:50

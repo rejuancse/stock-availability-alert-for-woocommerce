@@ -30,7 +30,6 @@
                     ?>
                 </span>
 
-
                 <div class="export_csv">
                     <?php wp_nonce_field( 'stock_notification_export', 'stock_notification_export_nonce' ); ?>
                     <input type="submit" name="export_csv" class="button button-primary" value="<?php esc_attr_e( 'Export to CSV', 'stock-availability-alert-for-woocommerce' ); ?>">

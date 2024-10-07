@@ -204,7 +204,7 @@ class Stock_Notifications_Menu {
                                 <tr>
                                     <td style="padding: 0;">
                                         <div style="background-color: #34495e; color: #f1c40f; padding: 20px; text-align: center;">
-                                            <h1 style="margin: 0; font-size: 20px; font-weight: 600;">' . esc_html__('Product Back in Stock', 'your-text-domain') . '</h1>
+                                            <h1 style="margin: 0; font-size: 20px; font-weight: 600;">' . esc_html__('Product Back in Stock', 'stock-availability-alert-for-woocommerce') . '</h1>
                                         </div>
                                     </td>
                                 </tr>
@@ -215,12 +215,12 @@ class Stock_Notifications_Menu {
                                 <tr style="padding: 0; vertical-align: top; text-align: left;">
                                     <td class="content" style="border-collapse: collapse !important; vertical-align: top; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; margin: 0; text-align: left; font-size: 14px; line-height: 140%; padding: 60px 75px 45px 75px; position: relative; flex-direction: column; min-width: 0; background-color: #fff; border: 1px solid #eceef3;" align="left" valign="top">
                                         <div class="success">
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Hello,', 'your-text-domain') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'your-text-domain') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('You can purchase it here:', 'your-text-domain') . ' <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">' . esc_html__('Buy Now', 'your-text-domain') . '</a></p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Thank you for your patience and interest in our products.', 'your-text-domain') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Best Regards,', 'your-text-domain') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('The {site_name} Team', 'your-text-domain') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Hello,', 'stock-availability-alert-for-woocommerce') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'stock-availability-alert-for-woocommerce') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('You can purchase it here:', 'stock-availability-alert-for-woocommerce') . ' <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">' . esc_html__('Buy Now', 'stock-availability-alert-for-woocommerce') . '</a></p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Thank you for your patience and interest in our products.', 'stock-availability-alert-for-woocommerce') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Best Regards,', 'stock-availability-alert-for-woocommerce') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('The {site_name} Team', 'stock-availability-alert-for-woocommerce') . '</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -231,7 +231,7 @@ class Stock_Notifications_Menu {
                                 <tr>
                                     <td style="padding: 0;">
                                         <div style="background-color: #34495e; color: #ffffff; padding: 12px 20px; text-align: center;">
-                                            <span style="margin: 0; font-size: 14px; font-weight: 400;">© 2024 {site_name} | ' . esc_html__('All rights reserved.', 'your-text-domain') . '</span>
+                                            <span style="margin: 0; font-size: 14px; font-weight: 400;">© 2024 {site_name} | ' . esc_html__('All rights reserved.', 'stock-availability-alert-for-woocommerce') . '</span>
                                         </div>
                                     </td>
                                 </tr>

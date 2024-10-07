@@ -1,12 +1,12 @@
 {
-    "name": "rejuan/enhanced-stock-availability-alert",
+    "name": "thebitcraft/stock-availability-alert-for-woocommerce",
     "description": "Implement a notification system for out-of-stock items with advanced features including admin interface, better product suggestions, customizable emails, and rate limiting.",
     "type": "wordpress-plugin",
     "license": "GPLv2",
     "authors": [
         {
-            "name": "rejuancse",
-            "email": "rejuancse@gmail.com"
+            "name": "TheBitCraft",
+            "email": "hello@thebitcraft.com"
         }
     ],
     "minimum-stability": "dev",
