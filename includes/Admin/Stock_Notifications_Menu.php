@@ -77,7 +77,7 @@ class Stock_Notifications_Menu {
         global $wpdb;
 
         // Handle CSV export if the export button was clicked.
-        if (isset($_POST['export_csv'])) {
+        if ( isset( $_POST['export_csv'] ) ) {
             $this->generate_csv(); // Call the method to generate and download the CSV.
         }
 
@@ -88,29 +88,28 @@ class Stock_Notifications_Menu {
         $items_per_page = 10;
 
         // Get the current page number, ensuring it's valid.
-        $paged = isset($_GET['paged']) && is_numeric($_GET['paged']) ? intval($_GET['paged']) : 1;
-        $offset = ($paged - 1) * $items_per_page;
+        $paged = isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) ? intval( $_GET['paged'] ) : 1;
+        $offset = ( $paged - 1 ) * $items_per_page;
 
         // Fetch the total number of stock notifications to calculate pagination.
-        $total_notifications = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
+        $total_notifications = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
 
         // Fetch the notifications for the current page, using SQL LIMIT and OFFSET.
-        // Ensure that $items_per_page and $offset are passed safely using $wpdb->prepare.
-        $notifications = $wpdb->get_results($wpdb->prepare(
+        $notifications = $wpdb->get_results( $wpdb->prepare(
             "SELECT * FROM $table_name ORDER BY date_added DESC LIMIT %d OFFSET %d",
             $items_per_page,
             $offset
-        ));
+        ) );
 
         // Path to the admin page template file.
         $template_path = STOCK_ALERT_PATH . 'templates/admin-page.php';
 
         // Check if the template exists before including it.
-        if (file_exists($template_path)) {
-            include($template_path);
+        if ( file_exists( $template_path ) ) {
+            include $template_path; // No parentheses needed for include.
         } else {
             // Template not found, display an error or a fallback message.
-            echo '<div class="notice notice-error"><p>Template file not found.</p></div>';
+            echo '<div class="notice notice-error"><p>' . esc_html__( 'Template file not found.', 'your-text-domain' ) . '</p></div>';
         }
     }
 
@@ -160,11 +159,14 @@ class Stock_Notifications_Menu {
      * @return void
      */
     public function settings_page() {
-        // Check if the settings form has been submitted
         if (isset($_POST['submit_settings'])) {
-            // Sanitize and update options in the WordPress database
-            update_option('stock_notification_threshold', intval($_POST['notification_threshold']));
-            update_option('stock_notification_email_templates', wp_kses_post($_POST['email_templates']));
+            if ( isset( $_POST['notification_threshold'] ) ) {
+                update_option('stock_notification_threshold', intval( sanitize_text_field( wp_unslash( $_POST['notification_threshold'] ) ) ) );
+            }
+
+            if ( isset( $_POST['email_templates'] ) ) {
+                update_option('stock_notification_email_templates', wp_kses_post( wp_unslash( $_POST['email_templates'] ) ) );
+            }
 
             // Display success message
             echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-availability-alert-for-woocommerce') . '</p></div>';
@@ -216,7 +218,7 @@ class Stock_Notifications_Menu {
                                     <td class="content" style="border-collapse: collapse !important; vertical-align: top; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; margin: 0; text-align: left; font-size: 14px; line-height: 140%; padding: 60px 75px 45px 75px; position: relative; flex-direction: column; min-width: 0; background-color: #fff; border: 1px solid #eceef3;" align="left" valign="top">
                                         <div class="success">
                                             <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Hello,', 'stock-availability-alert-for-woocommerce') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'stock-availability-alert-for-woocommerce') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . wp_kses_post(__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'stock-availability-alert-for-woocommerce')) . '</p>
                                             <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('You can purchase it here:', 'stock-availability-alert-for-woocommerce') . ' <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">' . esc_html__('Buy Now', 'stock-availability-alert-for-woocommerce') . '</a></p>
                                             <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Thank you for your patience and interest in our products.', 'stock-availability-alert-for-woocommerce') . '</p>
                                             <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Best Regards,', 'stock-availability-alert-for-woocommerce') . '</p>
@@ -254,22 +256,24 @@ class Stock_Notifications_Menu {
      * Sends appropriate JSON response based on the outcome.
      */
     public function handle_stock_notification() {
-        // Sanitize and validate inputs
-        $email = $this->sanitize_and_validate_email( sanitize_email( wp_unslash( $_POST['email'] ) ) );
-        $product_id = $this->sanitize_and_validate_product_id( absint( wp_unslash( $_POST['product_id'] ) ) );
+        if( isset( $_POST['email'] ) && isset( $_POST['product_id'] ) ) {
+            // Sanitize and validate inputs
+            $email = $this->sanitize_and_validate_email( sanitize_email( wp_unslash( $_POST['email'] ) ) );
+            $product_id = $this->sanitize_and_validate_product_id( absint( wp_unslash( $_POST['product_id'] ) ) );
 
-        // Check rate limiting to prevent multiple requests
-        if ($this->is_rate_limited($email)) {
-            wp_send_json_error( __( 'Too many requests. Please try again later.', 'stock-availability-alert-for-woocommerce' ) );
-        }
+            // Check rate limiting to prevent multiple requests
+            if ($this->is_rate_limited($email)) {
+                wp_send_json_error( __( 'Too many requests. Please try again later.', 'stock-availability-alert-for-woocommerce' ) );
+            }
 
-        // Check for existing notification
-        $existing_notification = $this->get_existing_notification( $email, $product_id );
+            // Check for existing notification
+            $existing_notification = $this->get_existing_notification( $email, $product_id );
 
-        if ( $existing_notification ) {
-            $this->handle_existing_notification( $existing_notification, $product_id );
-        } else {
-            $this->create_new_notification( $email, $product_id );
+            if ( $existing_notification ) {
+                $this->handle_existing_notification( $existing_notification, $product_id );
+            } else {
+                $this->create_new_notification( $email, $product_id );
+            }
         }
     }
 
