@@ -1,6 +1,6 @@
 {
-  "name": "stock-availability-alert-for-woocommerce",
-  "description": "Add favorite icons to posts. Users can save posts to their favorites list for easy access later.",
+  "name": "stock-availability-alert",
+  "description": "Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more",
   "version": "1.0.0",
   "author": "TheBitCraft",
   "license": "MIT",

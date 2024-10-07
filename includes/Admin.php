@@ -1,6 +1,6 @@
 <?php
 
-namespace StockAlert;
+namespace StockAvailabilityAlert;
 
 /**
  * The admin class
@@ -31,7 +31,7 @@ class Admin {
     public function add_dashboard_widget() {
         wp_add_dashboard_widget(
             'stock_notification_dashboard_widget',
-            __('Stock Notification Statistics', 'stock-availability-alert-for-woocommerce'),
+            __('Stock Notification Statistics', 'stock-availability-alert'),
             array($this, 'dashboard_widget_function')
         );
     }

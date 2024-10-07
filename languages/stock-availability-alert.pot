@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Stock Availability Alert for WooCommerce 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/stock-availability-alert-for-woocommerce\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/stock-availability-alert\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,22 +15,22 @@ msgstr ""
 "X-Domain: stock-alert\n"
 
 #. Plugin Name of the plugin
-#: stock-availability-alert-for-woocommerce.php
+#: stock-availability-alert.php
 msgid "Stock Availability Alert for WooCommerce"
 msgstr ""
 
 #. Description of the plugin
-#: stock-availability-alert-for-woocommerce.php
+#: stock-availability-alert.php
 msgid "Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more."
 msgstr ""
 
 #. Author of the plugin
-#: stock-availability-alert-for-woocommerce.php
+#: stock-availability-alert.php
 msgid "TheBitCraft"
 msgstr ""
 
 #. Author URI of the plugin
-#: stock-availability-alert-for-woocommerce.php
+#: stock-availability-alert.php
 msgid "https://thebitcraft.com"
 msgstr ""
 

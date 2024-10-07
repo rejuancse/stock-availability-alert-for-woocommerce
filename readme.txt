@@ -9,7 +9,7 @@ Stable tag:  1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back.
+Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more
 
 == Description ==
 Stock Availability Alert enhances WooCommerce by notifying customers when out-of-stock products are available again. Users can easily subscribe to notifications via email. The plugin features an intuitive admin interface, better product suggestions, customizable email templates, and rate limiting to manage notifications efficiently. Keep your customers engaged and drive sales with automatic stock alerts and a well-managed subscriber list.

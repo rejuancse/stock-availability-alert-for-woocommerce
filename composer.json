@@ -1,6 +1,6 @@
 {
-    "name": "thebitcraft/stock-availability-alert-for-woocommerce",
-    "description": "Implement a notification system for out-of-stock items with advanced features including admin interface, better product suggestions, customizable emails, and rate limiting.",
+    "name": "thebitcraft/stock-availability-alert",
+    "description": "Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more.",
     "type": "wordpress-plugin",
     "license": "GPLv2",
     "authors": [
@@ -12,7 +12,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-          "StockAlert\\": "includes/"
+          "StockAvailabilityAlert\\": "includes/"
         },
         "files": []
     },

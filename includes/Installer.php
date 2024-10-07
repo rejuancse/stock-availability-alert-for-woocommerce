@@ -1,11 +1,11 @@
 <?php
 
-namespace StockAlert;
+namespace StockAvailabilityAlert;
 
 /**
  * Installer class
  *
- * @package StockAlert
+ * @package StockAvailabilityAlert
  * @since 1.0.0
  */
 class Installer {
@@ -66,4 +66,4 @@ class Installer {
 }
 
 // Register the activation hook in the main plugin file
-register_activation_hook( __FILE__, array( 'StockAlert\Installer', 'run' ) );
+register_activation_hook( __FILE__, array( 'StockAvailabilityAlert\Installer', 'run' ) );

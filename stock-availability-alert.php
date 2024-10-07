@@ -7,7 +7,7 @@
  * Requires PHP:      7.4
  * Author:            TheBitCraft
  * Author URI:        https://thebitcraft.com
- * Text Domain:       stock-availability-alert-for-woocommerce
+ * Text Domain:       stock-availability-alert
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Requires Plugins: woocommerce
@@ -45,7 +45,7 @@ final class Stock_Availability_Alert {
     * Load Text Domain Language
     */
     function stock_alert_language_load(){
-        load_plugin_textdomain( 'stock-availability-alert-for-woocommerce', false, basename( dirname( __FILE__ ) ).'/languages/' );
+        load_plugin_textdomain( 'stock-availability-alert', false, basename( dirname( __FILE__ ) ).'/languages/' );
     }
 
     /**
@@ -81,7 +81,7 @@ final class Stock_Availability_Alert {
      * @return void
      */
     public function activate() {
-        $installer = new StockAlert\Installer();
+        $installer = new StockAvailabilityAlert\Installer();
         $installer->run();
     }
 
@@ -91,8 +91,8 @@ final class Stock_Availability_Alert {
      * @return void
      */
     public function init_plugin() {
-        new StockAlert\Admin();
-        new StockAlert\Frontend();
+        new StockAvailabilityAlert\Admin();
+        new StockAvailabilityAlert\Frontend();
     }
 
     /**

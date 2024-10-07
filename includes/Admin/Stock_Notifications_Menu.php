@@ -1,6 +1,6 @@
 <?php
 
-namespace StockAlert\Admin;
+namespace StockAvailabilityAlert\Admin;
 
 /**
  * Class Stock_Notifications_Menu
@@ -47,8 +47,8 @@ class Stock_Notifications_Menu {
      */
     public function add_admin_menu() {
         add_menu_page(
-            __( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ),
-            __( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ),
+            __( 'Stock Notifications', 'stock-availability-alert' ),
+            __( 'Stock Notifications', 'stock-availability-alert' ),
             'manage_options',
             'stock-notifications',
             array( $this, 'admin_page' ),
@@ -57,8 +57,8 @@ class Stock_Notifications_Menu {
 
         add_submenu_page(
             'stock-notifications',
-            __( 'Notification Settings', 'stock-availability-alert-for-woocommerce' ),
-            __( 'Settings', 'stock-availability-alert-for-woocommerce' ),
+            __( 'Notification Settings', 'stock-availability-alert' ),
+            __( 'Settings', 'stock-availability-alert' ),
             'manage_options',
             'stock-notifications-settings',
             array( $this, 'settings_page' )
@@ -169,7 +169,7 @@ class Stock_Notifications_Menu {
             }
 
             // Display success message
-            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-availability-alert-for-woocommerce') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'stock-availability-alert') . '</p></div>';
         }
 
         // Retrieve current saved options; use defaults if not set
@@ -184,7 +184,7 @@ class Stock_Notifications_Menu {
             include($template_path);
         } else {
             // Display an error message if the template file does not exist
-            echo '<div class="error"><p>' . esc_html__('Settings page template not found.', 'stock-availability-alert-for-woocommerce') . '</p></div>';
+            echo '<div class="error"><p>' . esc_html__('Settings page template not found.', 'stock-availability-alert') . '</p></div>';
         }
     }
 
@@ -206,7 +206,7 @@ class Stock_Notifications_Menu {
                                 <tr>
                                     <td style="padding: 0;">
                                         <div style="background-color: #34495e; color: #f1c40f; padding: 20px; text-align: center;">
-                                            <h1 style="margin: 0; font-size: 20px; font-weight: 600;">' . esc_html__('Product Back in Stock', 'stock-availability-alert-for-woocommerce') . '</h1>
+                                            <h1 style="margin: 0; font-size: 20px; font-weight: 600;">' . esc_html__('Product Back in Stock', 'stock-availability-alert') . '</h1>
                                         </div>
                                     </td>
                                 </tr>
@@ -217,12 +217,12 @@ class Stock_Notifications_Menu {
                                 <tr style="padding: 0; vertical-align: top; text-align: left;">
                                     <td class="content" style="border-collapse: collapse !important; vertical-align: top; color: #444; font-family: Helvetica,sans-serif; font-weight: normal; margin: 0; text-align: left; font-size: 14px; line-height: 140%; padding: 60px 75px 45px 75px; position: relative; flex-direction: column; min-width: 0; background-color: #fff; border: 1px solid #eceef3;" align="left" valign="top">
                                         <div class="success">
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Hello,', 'stock-availability-alert-for-woocommerce') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . wp_kses_post(__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'stock-availability-alert-for-woocommerce')) . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('You can purchase it here:', 'stock-availability-alert-for-woocommerce') . ' <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">' . esc_html__('Buy Now', 'stock-availability-alert-for-woocommerce') . '</a></p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Thank you for your patience and interest in our products.', 'stock-availability-alert-for-woocommerce') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Best Regards,', 'stock-availability-alert-for-woocommerce') . '</p>
-                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('The {site_name} Team', 'stock-availability-alert-for-woocommerce') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Hello,', 'stock-availability-alert') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . wp_kses_post(__('Great news! The product <strong>{product_name}</strong> is now back in stock at <strong>{site_name}</strong>.', 'stock-availability-alert')) . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('You can purchase it here:', 'stock-availability-alert') . ' <a style="padding: 10px 20px; margin: 10px 0; background-color: #f1c40f; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;" href="{product_url}">' . esc_html__('Buy Now', 'stock-availability-alert') . '</a></p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Thank you for your patience and interest in our products.', 'stock-availability-alert') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('Best Regards,', 'stock-availability-alert') . '</p>
+                                            <p class="text-large" style="color: #444; font-family: Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; line-height: 140%; margin: 0 0 15px 0; font-size: 14px;">' . esc_html__('The {site_name} Team', 'stock-availability-alert') . '</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -233,7 +233,7 @@ class Stock_Notifications_Menu {
                                 <tr>
                                     <td style="padding: 0;">
                                         <div style="background-color: #34495e; color: #ffffff; padding: 12px 20px; text-align: center;">
-                                            <span style="margin: 0; font-size: 14px; font-weight: 400;">© 2024 {site_name} | ' . esc_html__('All rights reserved.', 'stock-availability-alert-for-woocommerce') . '</span>
+                                            <span style="margin: 0; font-size: 14px; font-weight: 400;">© 2024 {site_name} | ' . esc_html__('All rights reserved.', 'stock-availability-alert') . '</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -263,7 +263,7 @@ class Stock_Notifications_Menu {
 
             // Check rate limiting to prevent multiple requests
             if ($this->is_rate_limited($email)) {
-                wp_send_json_error( __( 'Too many requests. Please try again later.', 'stock-availability-alert-for-woocommerce' ) );
+                wp_send_json_error( __( 'Too many requests. Please try again later.', 'stock-availability-alert' ) );
             }
 
             // Check for existing notification
@@ -288,7 +288,7 @@ class Stock_Notifications_Menu {
         $email = sanitize_email( $email );
 
         if (!is_email($email)) {
-            wp_send_json_error( __( 'Invalid email address', 'stock-availability-alert-for-woocommerce' ) );
+            wp_send_json_error( __( 'Invalid email address', 'stock-availability-alert' ) );
         }
 
         return $email;
@@ -305,7 +305,7 @@ class Stock_Notifications_Menu {
         $product_id = intval( $product_id );
 
         if ($product_id <= 0) {
-            wp_send_json_error( __( 'Invalid product ID', 'stock-availability-alert-for-woocommerce' ) );
+            wp_send_json_error( __( 'Invalid product ID', 'stock-availability-alert' ) );
         }
 
         return $product_id;
@@ -342,13 +342,13 @@ class Stock_Notifications_Menu {
 
         // If the existing notification is within the last 24 hours
         if ($time_difference < 24 * 60 * 60) {
-            wp_send_json_error(__('You have already subscribed to notifications for this product.', 'stock-availability-alert-for-woocommerce'));
+            wp_send_json_error(__('You have already subscribed to notifications for this product.', 'stock-availability-alert'));
         }
 
         // Renew the subscription
         $this->renew_notification($existing_notification->id);
         wp_send_json_success(array(
-            'message' => __("Your notification subscription has been renewed for this product.", 'stock-availability-alert-for-woocommerce'),
+            'message' => __("Your notification subscription has been renewed for this product.", 'stock-availability-alert'),
             'alternatives' => $this->get_alternative_products($product_id)
         ));
     }
@@ -411,12 +411,12 @@ class Stock_Notifications_Menu {
         $product = wc_get_product($product_id);
 
         // Determine the product name, defaulting to 'this product' if not found
-        $product_name = $product ? $product->get_name() : __('this product', 'stock-availability-alert-for-woocommerce');
+        $product_name = $product ? $product->get_name() : __('this product', 'stock-availability-alert');
 
         $response_data = array(
             'message'      => sprintf(
                 /* translators: %s: product name */
-                __( 'Thank you for subscribing! We\'ll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!', 'stock-availability-alert-for-woocommerce' ),
+                __( 'Thank you for subscribing! We\'ll notify you as soon as the <strong>%s</strong> is back in stock. Stay tuned!', 'stock-availability-alert' ),
                 esc_html( $product_name )
             ),
             'alternatives' => $this->get_alternative_products( $product_id ),
@@ -504,7 +504,7 @@ class Stock_Notifications_Menu {
             $to = sanitize_email( $notification->email );
             $subject = sprintf(
                 /* translators: %s: product name */
-                __( 'Product Back in Stock: %s', 'stock-availability-alert-for-woocommerce' ),
+                __( 'Product Back in Stock: %s', 'stock-availability-alert' ),
                 esc_html( $product->get_name() )
             );
 
@@ -638,7 +638,7 @@ class Stock_Notifications_Menu {
         // Add admin notice to indicate successful deletion
         add_action('admin_notices', function() {
             echo '<div class="notice notice-success is-dismissible">';
-            echo '<p>' . esc_html__('Selected notifications have been deleted.', 'stock-availability-alert-for-woocommerce') . '</p>';
+            echo '<p>' . esc_html__('Selected notifications have been deleted.', 'stock-availability-alert') . '</p>';
             echo '</div>';
         });
     }
