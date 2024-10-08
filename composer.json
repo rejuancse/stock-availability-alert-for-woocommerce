@@ -1,5 +1,5 @@
 {
-    "name": "thebitcraft/stock-availability-alert",
+    "name": "thebitcraft/stock-availability-alert-for-woocommerce",
     "description": "Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more.",
     "type": "wordpress-plugin",
     "license": "GPLv2",

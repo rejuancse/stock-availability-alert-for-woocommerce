@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Stock Availability Alert for WooCommerce
- * Description: Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more.
+ * Description: Notify customers when out-of-stock WooCommerce products are back in stock. Features "Notify Me" option and automatic email alerts.
  * Version:           1.0.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            TheBitCraft
  * Author URI:        https://thebitcraft.com
- * Text Domain:       stock-availability-alert
+ * Text Domain:       stock-availability-alert-for-woocommerce
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Requires Plugins: woocommerce
@@ -45,7 +45,7 @@ final class Stock_Availability_Alert {
     * Load Text Domain Language
     */
     function stock_alert_language_load(){
-        load_plugin_textdomain( 'stock-availability-alert', false, basename( dirname( __FILE__ ) ).'/languages/' );
+        load_plugin_textdomain( 'stock-availability-alert-for-woocommerce', false, basename( dirname( __FILE__ ) ).'/languages/' );
     }
 
     /**
@@ -68,11 +68,11 @@ final class Stock_Availability_Alert {
      * @return void
      */
     public function define_constants() {
-        define( 'STOCK_ALERT_VERSION', self::version );
-        define( 'STOCK_ALERT_FILE', __FILE__ );
-        define( 'STOCK_ALERT_PATH', plugin_dir_path( STOCK_ALERT_FILE ) ); // Correct path to the plugin's directory
-        define( 'STOCK_ALERT_URL', plugin_dir_url( STOCK_ALERT_FILE ) );   // Correct URL for the plugin's assets
-        define( 'STOCK_ALERT_ASSETS', STOCK_ALERT_URL . 'assets' );        // URL for the plugin's assets directory
+        define( 'STOCK_AVAILABILITY_ALERT_VERSION', self::version );
+        define( 'STOCK_AVAILABILITY_ALERT_FILE', __FILE__ );
+        define( 'STOCK_AVAILABILITY_ALERT_PATH', plugin_dir_path( STOCK_AVAILABILITY_ALERT_FILE ) ); // Correct path to the plugin's directory
+        define( 'STOCK_AVAILABILITY_ALERT_URL', plugin_dir_url( STOCK_AVAILABILITY_ALERT_FILE ) );   // Correct URL for the plugin's assets
+        define( 'STOCK_AVAILABILITY_ALERT_ASSETS', STOCK_AVAILABILITY_ALERT_URL . 'assets' );        // URL for the plugin's assets directory
     }
 
     /**
@@ -100,10 +100,10 @@ final class Stock_Availability_Alert {
      * @ Frontend
      */
     public function frontend_script(){
-        wp_enqueue_style( 'stock-alert-front', STOCK_ALERT_URL .'/assets/dist/css/notify-style.css', false, STOCK_ALERT_VERSION );
+        wp_enqueue_style( 'stock-alert-front', STOCK_AVAILABILITY_ALERT_URL .'/assets/dist/css/notify-style.css', false, STOCK_AVAILABILITY_ALERT_VERSION );
 
         #JS
-        wp_enqueue_script( 'stock-alert-notify-script', STOCK_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_ALERT_VERSION, true );
+        wp_enqueue_script( 'stock-alert-notify-script', STOCK_AVAILABILITY_ALERT_URL .'/assets/dist/js/notify-script.js', array('jquery'), STOCK_AVAILABILITY_ALERT_VERSION, true );
         wp_localize_script( 'stock-alert-notify-script', 'notify_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
     }
 
@@ -112,7 +112,7 @@ final class Stock_Availability_Alert {
      * @ Admin
      */
     public function admin_script(){
-        wp_enqueue_style( 'stock-alert-admin', STOCK_ALERT_URL .'/assets/dist/css/stock-admin.css', false, STOCK_ALERT_VERSION );
+        wp_enqueue_style( 'stock-alert-admin', STOCK_AVAILABILITY_ALERT_URL .'/assets/dist/css/stock-admin.css', false, STOCK_AVAILABILITY_ALERT_VERSION );
     }
 }
 

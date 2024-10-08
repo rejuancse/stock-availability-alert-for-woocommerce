@@ -31,7 +31,7 @@ class Admin {
     public function add_dashboard_widget() {
         wp_add_dashboard_widget(
             'stock_notification_dashboard_widget',
-            __('Stock Notification Statistics', 'stock-availability-alert'),
+            __('Stock Notification Statistics', 'stock-availability-alert-for-woocommerce'),
             array($this, 'dashboard_widget_function')
         );
     }
@@ -52,7 +52,7 @@ class Admin {
             $statistics = $this->get_stock_notification_statistics();
 
             // Include the dashboard widget template
-            include_once( STOCK_ALERT_PATH . 'templates/dashboard-widget.php' );
+            include_once( STOCK_AVAILABILITY_ALERT_PATH . 'templates/dashboard-widget.php' );
         } catch (\Exception $e) {
             // Handle any exceptions that occur during data retrieval
             error_log('Error retrieving stock notification statistics: ' . $e->getMessage());
