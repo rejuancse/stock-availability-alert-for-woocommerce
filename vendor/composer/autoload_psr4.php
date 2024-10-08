@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'StockAvailabilityAlert\\' => array($baseDir . '/includes'),
+    'Stock_Availability_Alert\\' => array($baseDir . '/includes'),
 );

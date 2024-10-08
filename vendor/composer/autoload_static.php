@@ -9,12 +9,12 @@ class ComposerStaticInit5cc33b50ffbf8b5f3e29a0a6d73a01ef
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'StockAvailabilityAlert\\' => 23,
+            'Stock_Availability_Alert\\' => 25,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'StockAvailabilityAlert\\' => 
+        'Stock_Availability_Alert\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',
         ),

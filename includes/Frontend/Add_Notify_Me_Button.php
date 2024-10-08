@@ -1,6 +1,6 @@
 <?php
 
-namespace StockAvailabilityAlert\Frontend;
+namespace Stock_Availability_Alert\Frontend;
 
 /**
  * Shortcode handler class for adding a "Notify Me" button on WooCommerce product pages.

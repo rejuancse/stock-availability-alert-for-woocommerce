@@ -20,7 +20,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 /**
  * The main plugin class
  */
-final class Stock_Availability_Alert {
+final class Stock_Availability_Alert_Notifier {
 
     /**
      * Plugin version
@@ -81,7 +81,7 @@ final class Stock_Availability_Alert {
      * @return void
      */
     public function activate() {
-        $installer = new StockAvailabilityAlert\Installer();
+        $installer = new Stock_Availability_Alert\Installer();
         $installer->run();
     }
 
@@ -91,8 +91,8 @@ final class Stock_Availability_Alert {
      * @return void
      */
     public function init_plugin() {
-        new StockAvailabilityAlert\Admin();
-        new StockAvailabilityAlert\Frontend();
+        new Stock_Availability_Alert\Admin();
+        new Stock_Availability_Alert\Frontend();
     }
 
     /**
@@ -120,7 +120,7 @@ final class Stock_Availability_Alert {
  * Initilizes the main plugin
  */
 function stock_availability_get_alert() {
-    return Stock_Availability_Alert::init();
+    return Stock_Availability_Alert_Notifier::init();
 }
 
 // Kick-off the plugin

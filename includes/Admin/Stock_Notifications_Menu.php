@@ -1,6 +1,6 @@
 <?php
 
-namespace StockAvailabilityAlert\Admin;
+namespace Stock_Availability_Alert\Admin;
 
 /**
  * Class Stock_Notifications_Menu

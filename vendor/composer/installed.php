@@ -3,7 +3,7 @@
         'name' => 'thebitcraft/stock-availability-alert-for-woocommerce',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '922df378b99a890509669f9d3af5747c8eee8bc6',
+        'reference' => '61ea1b83c13e29c5d753b586419fea35f4aaace9',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'thebitcraft/stock-availability-alert-for-woocommerce' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '922df378b99a890509669f9d3af5747c8eee8bc6',
+            'reference' => '61ea1b83c13e29c5d753b586419fea35f4aaace9',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

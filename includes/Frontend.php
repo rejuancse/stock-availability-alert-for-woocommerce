@@ -1,6 +1,6 @@
 <?php
 
-namespace StockAvailabilityAlert;
+namespace Stock_Availability_Alert;
 
 /**
  * Frontend handler class
