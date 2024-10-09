@@ -2,7 +2,7 @@
 
 <div class="wrap stock-notifications">
     <div class="stock-header">
-        <h1><?php esc_html_e( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ); ?></h1>
+        <h1><?php esc_html_e( 'Stock Availability Alert', 'stock-availability-alert-for-woocommerce' ); ?></h1>
     </div>
 
     <form id="bulk-action-form" method="post">
@@ -50,7 +50,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if ( ! empty( $notifications ) ) : ?>
+                <?php if ( ! empty( $notifications ) && function_exists( 'wc_get_product' ) ) : ?>
                     <?php foreach ( $notifications as $notification ) : ?>
                         <?php $product = wc_get_product( $notification->product_id ); ?>
                         <tr>

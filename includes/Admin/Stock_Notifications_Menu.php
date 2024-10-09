@@ -47,20 +47,20 @@ class Stock_Notifications_Menu {
      */
     public function add_admin_menu() {
         add_menu_page(
-            __( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ),
-            __( 'Stock Notifications', 'stock-availability-alert-for-woocommerce' ),
+            __( 'Stock Availability Alert', 'stock-availability-alert-for-woocommerce' ),
+            __( 'Stock Availability Alert', 'stock-availability-alert-for-woocommerce' ),
             'manage_options',
-            'stock-notifications',
+            'stock-availability-alert',
             array( $this, 'admin_page' ),
             'dashicons-email-alt'
         );
 
         add_submenu_page(
-            'stock-notifications',
-            __( 'Notification Settings', 'stock-availability-alert-for-woocommerce' ),
+            'stock-availability-alert',
+            __( 'Alert Settings', 'stock-availability-alert-for-woocommerce' ),
             __( 'Settings', 'stock-availability-alert-for-woocommerce' ),
             'manage_options',
-            'stock-notifications-settings',
+            'stock-availability-alert-settings',
             array( $this, 'settings_page' )
         );
     }

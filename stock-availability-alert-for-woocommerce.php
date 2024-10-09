@@ -5,12 +5,12 @@
  * Version:           1.0.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
+ * Tested up to:      6.6.1
  * Author:            TheBitCraft
  * Author URI:        https://thebitcraft.com
  * Text Domain:       stock-availability-alert-for-woocommerce
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Requires Plugins: woocommerce
  */
 
 defined( 'ABSPATH' ) || exit;

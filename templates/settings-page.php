@@ -1,7 +1,7 @@
 <?php defined('ABSPATH') || exit; ?>
 
 <div class="wrap stock-notification-settings">
-    <h1><?php esc_html_e( 'Stock Notification Settings', 'stock-availability-alert-for-woocommerce' ); ?></h1>
+    <h1><?php esc_html_e( 'Stock Availability Alert', 'stock-availability-alert-for-woocommerce' ); ?></h1>
 
     <!-- Settings form -->
     <form method="post">

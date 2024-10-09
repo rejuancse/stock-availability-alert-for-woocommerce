@@ -41,7 +41,7 @@ msgstr ""
 #: includes/Admin/Stock_Notifications_Menu.php:50
 #: includes/Admin/Stock_Notifications_Menu.php:51
 #: templates/admin-page.php:5
-msgid "Stock Notifications"
+msgid "Stock Alert"
 msgstr ""
 
 #: includes/Admin/Stock_Notifications_Menu.php:60
@@ -221,7 +221,7 @@ msgid "Unique Subscribers: %d"
 msgstr ""
 
 #: templates/settings-page.php:4
-msgid "Stock Notification Settings"
+msgid "Stock Availability Alert"
 msgstr ""
 
 #: templates/settings-page.php:10
