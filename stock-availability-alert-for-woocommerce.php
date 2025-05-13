@@ -4,7 +4,7 @@
  * Author URI: https://thebitcraft.com
  * Description: Inform customers when out-of-stock WooCommerce products return to stock. "Notify Me" functionality and automatic email reminders.
  * Author: TheBitCraft
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 5.9
  * Requires PHP: 7.4
  * Tested up to: 6.8
@@ -27,7 +27,7 @@ final class Stock_Availability_Alert {
      *
      * @var string
      */
-    const version = '1.0.0';
+    const version = '1.0.1';
 
     /**
      * Class construcotr

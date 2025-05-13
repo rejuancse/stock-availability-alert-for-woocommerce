@@ -5,7 +5,7 @@ Tags: stock alert, alert email, in stock, out of stock, woocommerce stock
 Requires at least: 5.9
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag:  1.0.0
+Stable tag:  1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,10 @@ A. Found a bug? Please let us know by posting on the support section of this plu
 
 
 == Changelog ==
+
+= 1.0.1 [13/05/2025] =
+* Bug Fixed
+* CSS issue fixed
 
 = 1.0.0 [19/09/2024] =
 * Initial version released

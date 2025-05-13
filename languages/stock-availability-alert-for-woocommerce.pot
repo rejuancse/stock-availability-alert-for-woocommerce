@@ -1,4 +1,4 @@
-# Copyright (C) 2024 TheBitCraft
+# Copyright (C) 2025 TheBitCraft
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-07T10:37:09+00:00\n"
+"POT-Creation-Date: 2025-05-13T00:52:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: stock-availability-alert-for-woocommerce\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. Description of the plugin
 #: stock-availability-alert-for-woocommerce.php
-msgid "Stock Availability Alert for WooCommerce notifies customers via email when out-of-stock items are back. Includes admin management, suggestions, and more."
+msgid "Inform customers when out-of-stock WooCommerce products return to stock. \"Notify Me\" functionality and automatic email reminders."
 msgstr ""
 
 #. Author of the plugin
@@ -34,22 +34,44 @@ msgstr ""
 msgid "https://thebitcraft.com"
 msgstr ""
 
-#: includes/Admin.php:34
+#: includes/Admin.php:35
 msgid "Stock Notification Statistics"
+msgstr ""
+
+#: includes/Admin/Initial_Setup.php:39
+#: includes/Admin/Initial_Setup.php:55
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/Admin/Initial_Setup.php:53
+msgid "Thanks for installing Stock Availability Alert for WooCommerce, you rock! 🤘"
+msgstr ""
+
+#: includes/Admin/Initial_Setup.php:54
+msgid "To enable eCommerce features, you need to install the"
+msgstr ""
+
+#: includes/Admin/Initial_Setup.php:56
+msgid "plugin."
 msgstr ""
 
 #: includes/Admin/Stock_Notifications_Menu.php:50
 #: includes/Admin/Stock_Notifications_Menu.php:51
 #: templates/admin-page.php:5
-msgid "Stock Alert"
+#: templates/settings-page.php:4
+msgid "Stock Availability Alert"
 msgstr ""
 
 #: includes/Admin/Stock_Notifications_Menu.php:60
-msgid "Notification Settings"
+msgid "Alert Settings"
 msgstr ""
 
 #: includes/Admin/Stock_Notifications_Menu.php:61
 msgid "Settings"
+msgstr ""
+
+#: includes/Admin/Stock_Notifications_Menu.php:112
+msgid "Template file not found."
 msgstr ""
 
 #: includes/Admin/Stock_Notifications_Menu.php:172
@@ -134,15 +156,15 @@ msgstr ""
 msgid "Selected notifications have been deleted."
 msgstr ""
 
-#: includes/Frontend/Add_Notify_Me_Button.php:34
+#: includes/Frontend/Add_Notify_Me_Button.php:33
 msgid "Notify Me When Available"
 msgstr ""
 
-#: includes/Frontend/Add_Notify_Me_Button.php:37
+#: includes/Frontend/Add_Notify_Me_Button.php:36
 msgid "Enter your email"
 msgstr ""
 
-#: includes/Frontend/Add_Notify_Me_Button.php:39
+#: includes/Frontend/Add_Notify_Me_Button.php:38
 msgid "Notify Me"
 msgstr ""
 
@@ -218,10 +240,6 @@ msgstr ""
 #. Translators: This is the total number of unique subscribers.
 #: templates/dashboard-widget.php:23
 msgid "Unique Subscribers: %d"
-msgstr ""
-
-#: templates/settings-page.php:4
-msgid "Stock Availability Alert"
 msgstr ""
 
 #: templates/settings-page.php:10
