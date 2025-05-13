@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Stock Availability Alert for WooCommerce
- * Description: Notify customers when out-of-stock WooCommerce products are back in stock. Features "Notify Me" option and automatic email alerts.
- * Version:           1.0.0
+ * Author URI: https://thebitcraft.com
+ * Description: Inform customers when out-of-stock WooCommerce products return to stock. "Notify Me" functionality and automatic email reminders.
+ * Author: TheBitCraft
+ * Version: 1.0.0
  * Requires at least: 5.9
- * Requires PHP:      7.4
- * Tested up to:      6.6.1
- * Author:            TheBitCraft
- * Author URI:        https://thebitcraft.com
- * Text Domain:       stock-availability-alert-for-woocommerce
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Requires PHP: 7.4
+ * Tested up to: 6.8
+ * Text Domain: stock-availability-alert-for-woocommerce
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 defined( 'ABSPATH' ) || exit;

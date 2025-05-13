@@ -24,7 +24,6 @@ class Add_Notify_Me_Button {
 
         // Check if the global product object is available
         if ( empty( $product ) || ! is_a( $product, 'WC_Product' ) ) {
-            error_log('Product object is not available or invalid in Notify Me Button.');
             return; // Exit if product is not valid
         }
 

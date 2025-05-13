@@ -308,7 +308,7 @@
 
 .notification-threshold input[type="number"] {
     width: 100%;
-    padding: 10px;
+    padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
@@ -386,9 +386,9 @@
     background-color: #007cba;
     border: none;
     color: #fff;
-    padding: 10px 25px;
-    font-size: 16px;
-    font-weight: 600;
+    padding: 6px 20px;
+    font-size: 15px;
+    font-weight: 500;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;

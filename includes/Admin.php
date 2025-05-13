@@ -56,7 +56,6 @@ class Admin {
             include_once( STOCK_AVAILABILITY_ALERT_PATH . 'templates/dashboard-widget.php' );
         } catch (\Exception $e) {
             // Handle any exceptions that occur during data retrieval
-            error_log('Error retrieving stock notification statistics: ' . $e->getMessage());
             echo '<p>An error occurred while retrieving data. Please try again later.</p>';
         }
     }

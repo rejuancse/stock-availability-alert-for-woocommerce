@@ -109,7 +109,7 @@ class Stock_Notifications_Menu {
             include $template_path; // No parentheses needed for include.
         } else {
             // Template not found, display an error or a fallback message.
-            echo '<div class="notice notice-error"><p>' . esc_html__( 'Template file not found.', 'your-text-domain' ) . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . esc_html__( 'Template file not found.', 'stock-availability-alert-for-woocommerce' ) . '</p></div>';
         }
     }
 

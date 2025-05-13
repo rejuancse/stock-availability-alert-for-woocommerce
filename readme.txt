@@ -1,18 +1,18 @@
 === Stock Availability Alert for WooCommerce ===
 
-Contributors: thebitcraft
-Tags: stock alert, email, notification, stock availability, product stock
+Contributors: thebitcraft, rejuancse
+Tags: stock alert, alert email, in stock, out of stock, woocommerce stock
 Requires at least: 5.9
-Tested up to: 6.6
+Tested up to: 6.8
 Requires PHP: 7.4
 Stable tag:  1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Notify customers when out-of-stock WooCommerce products are back in stock. Features "Notify Me" option and automatic email alerts.
+Inform customers when out-of-stock WooCommerce products return to stock. "Notify Me" functionality and automatic email reminders.
 
 == Description ==
-Stock Availability Alert enhances WooCommerce by notifying customers when out-of-stock products are available again. Users can easily subscribe to notifications via email. The plugin features an intuitive admin interface, better product suggestions, customizable email templates, and rate limiting to manage notifications efficiently. Keep your customers engaged and drive sales with automatic stock alerts and a well-managed subscriber list.
+Stock Availability Alert improves WooCommerce by alerting consumers when out-of-stock items become available once more. Email subscription to alerts is simple for users. Better product suggestions, a user-friendly admin interface, customizable email templates, and rate limiting to effectively control alerts define the plugin. With a well-kept subscriber list and automatic stock alerts, keep your consumers interested and boost sales.
 
 = Features =
 
